@@ -1,0 +1,37 @@
+<div *ngIf="isInit" class="board">
+    <div class="newBoard"><button (click)="newBoard()">New Board</button></div>
+
+    <div *ngFor="let row of state" class="row">
+        <div
+            *ngFor="let cell of row"
+            class="cell"
+            [attr.data-state]="cell.state"
+            [style.backgroundColor]="cell.color"
+        >
+            {{ cell.char }}
+        </div>
+    </div>
+    <div>
+        <details>
+            <summary>Solution</summary>
+            <div *ngFor="let word of solution">{{ word }}</div>
+        </details>
+    </div>
+</div>
+<div
+    *ngFor="let guess of guesses; let i = index; trackBy: trackByIndex"
+    class="flex"
+>
+    <input
+        #wordInput
+        [(ngModel)]="guesses[i]"
+        (ngModelChange)="onInput($event)"
+        (keydown.enter)="onEnter(i)"
+        (keydown.backspace)="onBackspace($event, i)"
+    />
+    <div
+        class="guess {{ possibleWords.has(guesses[i]) ? 'valid' : 'invalid' }}"
+    >
+        {{ possibleWords.has(guesses[i]) ? 'O' : 'X' }}
+    </div>
+</div>

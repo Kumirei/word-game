@@ -25,15 +25,8 @@
             #wordInput
             [(ngModel)]="guesses[i]"
             (ngModelChange)="onInput($event)"
-            (keydown.enter)="onEnter(i)"
+            (keydown.enter)="onEnter($event, i)"
             (keydown.backspace)="onBackspace($event, i)"
         />
-        <div
-            class="guess {{
-                possibleWords.has(guesses[i]) ? 'valid' : 'invalid'
-            }}"
-        >
-            {{ possibleWords.has(guesses[i]) ? 'O' : 'X' }}
-        </div>
     </div>
 </div>

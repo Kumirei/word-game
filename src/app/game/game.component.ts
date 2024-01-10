@@ -83,9 +83,12 @@ export class GameComponent implements OnInit {
         return index
     }
 
-    onEnter(num: number) {
-        if (!this.guesses.every((guess) => this.possibleWords.has(guess)))
+    onEnter(event: any, num: number) {
+        if (!this.guesses.every((guess) => this.possibleWords.has(guess))) {
+            event.target.classList.add('wrongAnswer')
+            setTimeout(() => event.target.classList.remove('wrongAnswer'), 250)
             return
+        }
         this.guesses.push('')
         this.changeDetector.detectChanges()
 

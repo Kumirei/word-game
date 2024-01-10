@@ -51,8 +51,11 @@ export class GameComponent implements OnInit {
         )
         this.possibleWords = new Set(possibleWords)
         this.solution = solution
+        this.guesses = ['']
         this.isInit = true
         this.changeDetector.detectChanges()
+
+        this.wordInputs.first.nativeElement.focus()
     }
 
     onInput(text: string) {

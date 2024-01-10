@@ -17,21 +17,23 @@
             <div *ngFor="let word of solution">{{ word }}</div>
         </details>
     </div>
-</div>
-<div
-    *ngFor="let guess of guesses; let i = index; trackBy: trackByIndex"
-    class="flex"
->
-    <input
-        #wordInput
-        [(ngModel)]="guesses[i]"
-        (ngModelChange)="onInput($event)"
-        (keydown.enter)="onEnter(i)"
-        (keydown.backspace)="onBackspace($event, i)"
-    />
     <div
-        class="guess {{ possibleWords.has(guesses[i]) ? 'valid' : 'invalid' }}"
+        *ngFor="let guess of guesses; let i = index; trackBy: trackByIndex"
+        class="flex"
     >
-        {{ possibleWords.has(guesses[i]) ? 'O' : 'X' }}
+        <input
+            #wordInput
+            [(ngModel)]="guesses[i]"
+            (ngModelChange)="onInput($event)"
+            (keydown.enter)="onEnter(i)"
+            (keydown.backspace)="onBackspace($event, i)"
+        />
+        <div
+            class="guess {{
+                possibleWords.has(guesses[i]) ? 'valid' : 'invalid'
+            }}"
+        >
+            {{ possibleWords.has(guesses[i]) ? 'O' : 'X' }}
+        </div>
     </div>
 </div>

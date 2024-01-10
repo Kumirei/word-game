@@ -1,6 +1,7 @@
 .board {
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .row {
@@ -19,29 +20,18 @@
     text-align: center;
 }
 
-.cell[data-state='0'] {
-}
-
-.cell[data-state='1'] {
-    background-color: green;
-}
-
-.cell[data-state='2'] {
-    background-color: yellow;
-}
-
-.cell[data-state='3'] {
-    background-color: orange;
-}
-
-.cell[data-state='4'] {
-    background-color: red;
-}
-
 .guess.valid {
     background-color: green;
 }
 
 .guess.invalid {
     background-color: red;
+}
+
+input {
+    padding: 0.25rem;
+    font-size: 2rem;
+    text-transform: uppercase;
+    border-radius: 0%;
+    border-radius: 0.25em;
 }

@@ -1,28 +1,34 @@
 <div *ngIf="isInit" class="board">
     <div class="newBoard"><button (click)="newBoard()">New Board</button></div>
+    <div class="flex">
+        <select [(ngModel)]="size[0]">
+            <option *ngFor="let s of sizes" [value]="s">{{ s }}</option>
+        </select>
+        <select [(ngModel)]="size[1]">
+            <option *ngFor="let s of sizes" [value]="s">{{ s }}</option>
+        </select>
+    </div>
 
-    <div *ngFor="let row of state" class="row">
-        <div
-            *ngFor="let cell of row"
-            class="cell"
-            [attr.data-state]="cell.state"
-            [style.backgroundColor]="cell.color"
-        >
-            {{ cell.char }}
+    <div>
+        <div *ngFor="let row of state" class="row">
+            <div
+                *ngFor="let cell of row"
+                class="cell"
+                [attr.data-state]="cell.state"
+                [style.backgroundColor]="cell.color"
+            >
+                {{ cell.char }}
+            </div>
+        </div>
+        <div *ngIf="solved">
+            <span>Solution {{ solution.join(', ') }}</span>
         </div>
     </div>
-    <div>
-        <details>
-            <summary>Solution</summary>
-            <div *ngFor="let word of solution">{{ word }}</div>
-        </details>
-    </div>
-    <div
-        *ngFor="let guess of guesses; let i = index; trackBy: trackByIndex"
-        class="flex"
-    >
+    <div class="guesses flex column reverse">
         <input
             #wordInput
+            *ngFor="let guess of guesses; let i = index; trackBy: trackByIndex"
+            [disabled]="i !== guesses.length - 1"
             [(ngModel)]="guesses[i]"
             (ngModelChange)="onInput($event)"
             (keydown.enter)="onEnter($event, i)"

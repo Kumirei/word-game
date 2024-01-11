@@ -20,38 +20,52 @@ export class BoardService {
     constructor(private WordService: WordsService) {}
 
     public static getRandomBoard(size: [number, number] = [4, 4]) {
+        console.time('getBoard')
         const wordLength = size[0] * size[1]
         let grid: string[][]
         let possibleWords: Record<string, Set<string>>
-        let possibleWordsSmall: Record<string, Set<string>>
-        do {
+        // let possibleWordsSmall: Record<string, Set<string>>
+        let letters: string = ''
+        while (true) {
             // Try to get a word which can cover the whole board
-            // let letters = WordsService.getRandomWordOfLength(wordLength) || ''
-            let letters = ''
+            letters =
+                WordsService.getRandomWordOfLength('huge', wordLength) || ''
+            // let letters = ''
+            if (letters) {
+                // DFS put letters into grid until it works
+                grid = BoardService.createGridWithSolution(size, letters)
+                console.log('GRIDDDDD', grid)
+                possibleWords = BoardService.findWordsInGrid('small', grid)
+                break
+            }
             // If that is not possible, use random words
-            if (!letters) {
+            else {
                 while (!letters || letters.length < wordLength) {
                     letters = (letters + WordsService.getRandomWord()).slice(
                         0,
                         wordLength
                     )
                 }
+                grid = group(shuffle(letters.split('')), size[0])
+                possibleWords = BoardService.findWordsInGrid('small', grid)
+                if (this.isSolvable(grid, possibleWords)) break
             }
 
-            grid = group(shuffle(letters.split('')), size[0])
-            possibleWords = BoardService.findWordsInGrid('huge', grid)
-            possibleWordsSmall = BoardService.findWordsInGrid('medium', grid)
+            // possibleWords = BoardService.findWordsInGrid('huge', grid)
             console.log('WORD', letters)
-        } while (!this.isSolvable(grid, possibleWordsSmall)) // Make sure it's solvable at all
+        }
+        console.timeLog('getBoard', 'solvable')
 
-        let solution = BoardService.findASolution(grid, possibleWordsSmall)
+        let solution = BoardService.findASolution(grid, possibleWords)
+        console.timeLog('getBoard', 'solution')
 
         const solutionWords = solution
             .map((a) => a[0])
             .sort((a, b) => b.length - a.length)
+        console.timeEnd('getBoard')
         return {
             grid,
-            possibleWords: Object.keys(possibleWords),
+            // possibleWords: Object.keys(possibleWords),
             solution: solutionWords,
         }
     }
@@ -137,20 +151,18 @@ export class BoardService {
     }
 
     public static findWordsInGrid(
-        wordList: keyof typeof WordsService.words,
-        grid: string[][]
+        wordList: keyof typeof WordsService.words | 'custom',
+        grid: string[][],
+        customWordList?: string[]
     ): Record<string, Set<string>> {
+        let dictionary =
+            wordList === 'custom'
+                ? WordsService.makeDictionary(customWordList || []).dictionary
+                : WordsService.words[wordList].dictionary
         const foundWords: Record<string, Set<string>> = {}
         for (let y = 0; y < grid.length; y++) {
             for (let x = 0; x < grid[y].length; x++) {
-                BoardService.findWords(
-                    WordsService.words[wordList].dictionary,
-                    grid,
-                    '',
-                    x,
-                    y,
-                    foundWords
-                )
+                BoardService.findWords(dictionary, grid, '', x, y, foundWords)
             }
         }
         return foundWords
@@ -221,6 +233,10 @@ export class BoardService {
         )
     }
 
+    public static getNeighbors2(x: number, y: number) {
+        return BoardService.DELTAS.map(([dx, dy]) => [x + dx, y + dy])
+    }
+
     public static applyGuess(
         board: { char: string; state: number; color: string }[][],
         state: number,
@@ -257,5 +273,64 @@ export class BoardService {
             )(state / ((board[0].length * board.length) / 3))
         }
         return makesWord
+    }
+
+    public static doesWordCoverGrid(grid: string[][], word: string) {
+        const gridSize = grid.length * grid[0].length
+        const words = BoardService.findWordsInGrid('custom', grid, [word])
+        console.log('COVERS?', gridSize, words[word]?.size)
+
+        return words[word]?.size === gridSize
+    }
+
+    public static createGridWithSolution(
+        size: [number, number],
+        letters: string
+    ) {
+        console.log('createGridWithSolution', size, letters)
+
+        const grid = this.getEmptyGrid(size)
+
+        const x = Math.floor(Math.random() * size[0])
+        const y = Math.floor(Math.random() * size[1]) // Random starting position
+        this.placeSolutionOnGrid(grid, new Set(), letters, x, y)
+        return grid
+    }
+
+    private static placeSolutionOnGrid(
+        grid: string[][],
+        placed: Set<string>,
+        letters: string,
+        x: number,
+        y: number
+    ) {
+        console.log('placeSolutionOnGrid', { grid, placed, letters, x, y })
+
+        const key = `${x},${y}`
+        if (placed.has(key)) return
+        if (grid[y]?.[x] === undefined) return false
+
+        grid[y][x] = letters[0]
+        placed.add(key)
+        console.log('WHAT"', placed.size, grid[0].length * grid.length)
+
+        if (placed.size === grid[0].length * grid.length) return true
+
+        for (let [nx, ny] of BoardService.getNeighbors2(x, y)) {
+            if (
+                this.placeSolutionOnGrid(grid, placed, letters.slice(1), nx, ny)
+            )
+                return true
+        }
+
+        placed.delete(key)
+        grid[y][x] = ''
+        return false
+    }
+
+    private static getEmptyGrid(size: [number, number]) {
+        return new Array(size[1])
+            .fill(null)
+            .map((row) => new Array(size[0]).fill(''))
     }
 }

@@ -21,12 +21,14 @@ export class GameComponent implements OnInit {
 
     static GUESSES = 5
     @Input() size: [number, number] = [4, 4]
+    sizes = [3, 4, 5, 6, 7, 8, 9, 10, 15, 20]
     isInit = false
     board: string[][] = []
-    possibleWords: Set<string> = new Set()
+    // possibleWords: Set<string> = new Set()
     solution: string[] = []
     state: { char: string; state: number; color: string }[][] = []
     guesses: string[] = ['']
+    solved: boolean = false
 
     constructor(
         private changeDetector: ChangeDetectorRef,
@@ -41,15 +43,13 @@ export class GameComponent implements OnInit {
     }
 
     newBoard() {
-        const { grid, possibleWords, solution } = BoardService.getRandomBoard(
-            this.size
-        )
+        const { grid, solution } = BoardService.getRandomBoard(this.size)
 
         this.board = grid
         this.state = this.board.map((row) =>
             row.map((cell) => ({ char: cell, state: 0, color: '' }))
         )
-        this.possibleWords = new Set(possibleWords)
+        // this.possibleWords = new Set(possibleWords)
         this.solution = solution
         this.guesses = ['']
         this.isInit = true
@@ -84,11 +84,12 @@ export class GameComponent implements OnInit {
     }
 
     onEnter(event: any, num: number) {
-        if (!this.guesses.every((guess) => this.possibleWords.has(guess))) {
+        if (!this.guesses.every((guess) => WordsService.isWord(guess))) {
             event.target.classList.add('wrongAnswer')
             setTimeout(() => event.target.classList.remove('wrongAnswer'), 250)
             return
         }
+        if (this.isSolved()) return this.onSolve()
         this.guesses.push('')
         this.changeDetector.detectChanges()
 
@@ -110,5 +111,14 @@ export class GameComponent implements OnInit {
                 event.preventDefault() // Avoid deleting in new input field
             }
         }
+    }
+
+    isSolved() {
+        return this.state.every((row) => row.every((cell) => !!cell.state))
+    }
+
+    onSolve() {
+        alert('sovled!')
+        this.solved = true
     }
 }

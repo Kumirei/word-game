@@ -39,8 +39,12 @@ export class WordsService {
         console.log('data', data)
         const words = data.split(/[\r\n]+/)
 
+        return WordsService.makeDictionary(words)
+    }
+
+    public static makeDictionary(wordList: string[]) {
         const dictionary: DictionaryEntry = {}
-        for (let word of words) {
+        for (let word of wordList) {
             let dict = dictionary
             for (let char of word) {
                 if (!dict[char]) dict[char] = {}
@@ -49,7 +53,7 @@ export class WordsService {
             dict.isWord = true
         }
 
-        return { list: words, dictionary }
+        return { list: wordList, dictionary }
     }
 
     public static getRandomWordOfLength(
@@ -68,5 +72,11 @@ export class WordsService {
     ) {
         const alphaWords = words.filter((word) => !/[^\w]/.test(word))
         return alphaWords[Math.floor(alphaWords.length * Math.random())]
+    }
+
+    public static isWord(word: string) {
+        let dict = WordsService.words.huge.dictionary
+        for (let char of word) dict = dict?.[char]
+        return !!dict?.isWord
     }
 }

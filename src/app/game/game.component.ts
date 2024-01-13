@@ -158,7 +158,8 @@ export class GameComponent implements OnInit {
     }
 
     onSolve() {
-        alert('sovled!')
         this.solved = true
+        this.changeDetector.detectChanges()
+        alert('sovled!')
     }
 }

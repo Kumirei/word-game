@@ -58,6 +58,7 @@ export class GameComponent implements OnInit {
         this.guesses = ['']
         this.isInit = true
         this.updateColors()
+        this.solved = false
         this.changeDetector.detectChanges()
 
         // this.wordInputs.first.nativeElement.focus()

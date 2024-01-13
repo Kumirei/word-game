@@ -37,11 +37,16 @@
         >
         <input
             #wordInput
-            class="guess active"
+            class="guess"
+            [class.active]="!solved"
+            [disabled]="solved"
             [(ngModel)]="guesses[guesses.length - 1]"
             (ngModelChange)="onInput($event)"
             (keydown.enter)="onEnter($event)"
             (keydown.backspace)="onBackspace($event)"
+            [style.backgroundColor]="
+                solved ? colors[guesses.length - 1] : '#FFF'
+            "
         />
     </div>
 </div>

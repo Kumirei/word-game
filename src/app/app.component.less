@@ -2,4 +2,40 @@ header {
     text-align: center;
     background-color: #ffc3f6;
     padding: 0.5rem;
+    position: relative;
+}
+
+.newGame {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+}
+
+.newGame button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.newGame button {
+    border: none;
+    background: transparent;
+    font-size: 1.25em;
+    height: 100%;
+    padding: 0.5em;
+    cursor: pointer;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 0.5em;
+    height: 2em;
+    margin: auto;
+    color: white;
+    /* border: 1px solid gray; */
+    background: rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 500px) {
+    .newGame {
+        position: relative;
+    }
 }

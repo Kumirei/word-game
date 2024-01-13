@@ -1,10 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core'
+import { GameComponent } from './game/game.component'
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.less']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.less'],
 })
 export class AppComponent {
-  title = 'word-game';
+    @ViewChild(GameComponent) GameComponent!: GameComponent
+    title = 'word-game'
+
+    newGame() {
+        this.GameComponent.newBoard()
+    }
 }

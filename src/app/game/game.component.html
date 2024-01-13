@@ -1,13 +1,12 @@
 <div *ngIf="isInit" class="board">
-    <div class="newBoard"><button (click)="newBoard()">New Board</button></div>
-    <div class="flex">
+    <!-- <div class="flex">
         <select [(ngModel)]="size[0]">
-            <option *ngFor="let s of sizes" [value]="s">{{ s }}</option>
+            <option *ngFor="let s of sizes" [ngValue]="s">{{ s }}</option>
         </select>
         <select [(ngModel)]="size[1]">
-            <option *ngFor="let s of sizes" [value]="s">{{ s }}</option>
+            <option *ngFor="let s of sizes" [ngValue]="s">{{ s }}</option>
         </select>
-    </div>
+    </div> -->
 
     <div>
         <div *ngFor="let row of state" class="row">
@@ -15,24 +14,34 @@
                 *ngFor="let cell of row"
                 class="cell"
                 [attr.data-state]="cell.state"
-                [style.backgroundColor]="cell.color"
+                [style.backgroundColor]="colors[cell.state - 1]"
             >
                 {{ cell.char }}
             </div>
         </div>
-        <div *ngIf="solved">
-            <span>Solution {{ solution.join(', ') }}</span>
-        </div>
+    </div>
+    <div *ngIf="solved" class="solution">
+        <span>Solution: {{ solution.join(', ').toUpperCase() }}</span>
     </div>
     <div class="guesses flex column reverse">
+        <span
+            *ngFor="
+                let guess of guesses | slice: 0 : -1;
+                let i = index;
+                trackBy: trackByIndex
+            "
+            [attr.data-state]="i"
+            [style.backgroundColor]="colors[i]"
+            class="guess"
+            >{{ guess }}</span
+        >
         <input
             #wordInput
-            *ngFor="let guess of guesses; let i = index; trackBy: trackByIndex"
-            [disabled]="i !== guesses.length - 1"
-            [(ngModel)]="guesses[i]"
+            class="guess active"
+            [(ngModel)]="guesses[guesses.length - 1]"
             (ngModelChange)="onInput($event)"
-            (keydown.enter)="onEnter($event, i)"
-            (keydown.backspace)="onBackspace($event, i)"
+            (keydown.enter)="onEnter($event)"
+            (keydown.backspace)="onBackspace($event)"
         />
     </div>
 </div>

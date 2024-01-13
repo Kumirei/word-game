@@ -22,51 +22,62 @@ export class BoardService {
     public static getRandomBoard(size: [number, number] = [4, 4]) {
         console.time('getBoard')
         const wordLength = size[0] * size[1]
-        let grid: string[][]
-        let possibleWords: Record<string, Set<string>>
+        // let grid: string[][]
+        // let possibleWords: Record<string, Set<string>>
         // let possibleWordsSmall: Record<string, Set<string>>
-        let letters: string = ''
-        while (true) {
-            // Try to get a word which can cover the whole board
-            letters =
-                WordsService.getRandomWordOfLength('huge', wordLength) || ''
-            // let letters = ''
-            if (letters) {
-                // DFS put letters into grid until it works
-                grid = BoardService.createGridWithSolution(size, letters)
-                console.log('GRIDDDDD', grid)
-                possibleWords = BoardService.findWordsInGrid('small', grid)
-                break
-            }
-            // If that is not possible, use random words
-            else {
-                while (!letters || letters.length < wordLength) {
-                    letters = (letters + WordsService.getRandomWord()).slice(
-                        0,
-                        wordLength
-                    )
-                }
-                grid = group(shuffle(letters.split('')), size[0])
-                possibleWords = BoardService.findWordsInGrid('small', grid)
-                if (this.isSolvable(grid, possibleWords)) break
-            }
+        // let letters: string = ''
+        // while (true) {
+        // Try to get a word which can cover the whole board
+        const word =
+            (Math.random() < 0.1 &&
+                WordsService.getRandomWordOfLength('huge', wordLength)) ||
+            ''
+        // let letters = ''
+        const solution = word
+            ? [word]
+            : WordsService.getRandomWords(wordLength, 9)
+        // const solution = WordsService.getRandomWords(wordLength, 9)
+        // Get random words to fill grid
+        // Words should in general be at least 6 letters?
+        // const solution = WordsService.getRandomWords(wordLength, 6)
+        // DFS put letters into grid until it works
+        // grid = BoardService.createGridWithSolution(size, letters)
+        const grid = BoardService.createGridWithWords(size, solution)
+        // console.log('GRIDDDDD', grid)
+        // const possibleWords = BoardService.findWordsInGrid('small', grid)
+        // break
+        // }
+        // If that is not possible, use random words
+        // else {
+        //     while (!letters || letters.length < wordLength) {
+        //         letters = (letters + WordsService.getRandomWord()).slice(
+        //             0,
+        //             wordLength
+        //         )
+        //     }
+        //     grid = group(shuffle(letters.split('')), size[0])
+        //     possibleWords = BoardService.findWordsInGrid('small', grid)
+        //     if (this.isSolvable(grid, possibleWords)) break
+        // }
 
-            // possibleWords = BoardService.findWordsInGrid('huge', grid)
-            console.log('WORD', letters)
-        }
-        console.timeLog('getBoard', 'solvable')
+        // possibleWords = BoardService.findWordsInGrid('huge', grid)
+        // console.log('WORD', letters)
+        // }
+        // console.timeLog('getBoard', 'solvable')
 
-        let solution = BoardService.findASolution(grid, possibleWords)
-        console.timeLog('getBoard', 'solution')
+        // let solution = BoardService.findASolution(grid, possibleWords)
+        // console.timeLog('getBoard', 'solution')
 
-        const solutionWords = solution
-            .map((a) => a[0])
-            .sort((a, b) => b.length - a.length)
+        // const solutionWords = solution
+        //     .map((a) => a[0])
+        // .sort((a, b) => b.length - a.length)
         console.timeEnd('getBoard')
+        console.log('SOLUTION', solution)
+
         return {
             grid,
             // possibleWords: Object.keys(possibleWords),
-            solution: solutionWords,
+            solution,
         }
     }
 
@@ -217,7 +228,7 @@ export class BoardService {
                     BoardService.applyGuess(
                         board,
                         i + 1,
-                        guess,
+                        guess.toLowerCase(),
                         x,
                         y,
                         guesses.length
@@ -261,24 +272,25 @@ export class BoardService {
                 )
             )
             .some((a) => a)
-        if (!cell.state && makesWord) {
-            cell.state = state
-            console.log('SATE', x, y, state)
+        // if (!cell.state && makesWord) {
+        //     cell.state = state
+        //     // console.log('SATE', x, y, state)
 
-            const green = d3.rgb(136, 255, 141)
-            const red = d3.rgb(255, 136, 136)
-            cell.color = d3.interpolate(
-                green,
-                red
-            )(state / ((board[0].length * board.length) / 3))
-        }
+        //     // const green = d3.rgb(136, 255, 141)
+        //     // const red = d3.rgb(255, 136, 136)
+        //     // cell.color = d3.interpolate(
+        //     //     green,
+        //     //     red
+        //     // )(state / ((board[0].length * board.length) / 3))
+        // }
+        if (makesWord) cell.state = state
         return makesWord
     }
 
     public static doesWordCoverGrid(grid: string[][], word: string) {
         const gridSize = grid.length * grid[0].length
         const words = BoardService.findWordsInGrid('custom', grid, [word])
-        console.log('COVERS?', gridSize, words[word]?.size)
+        // console.log('COVERS?', gridSize, words[word]?.size)
 
         return words[word]?.size === gridSize
     }
@@ -287,7 +299,7 @@ export class BoardService {
         size: [number, number],
         letters: string
     ) {
-        console.log('createGridWithSolution', size, letters)
+        // console.log('createGridWithSolution', size, letters)
 
         const grid = this.getEmptyGrid(size)
 
@@ -297,6 +309,135 @@ export class BoardService {
         return grid
     }
 
+    private static createGridWithWords(
+        size: [number, number],
+        words: string[]
+    ) {
+        // console.log(size)
+
+        // return []
+        let prev = this.getEmptyGrid(size)
+        let curr = this.copyGrid(prev)
+        for (let word of words) {
+            while (true) {
+                // console.log('CREATE GRID WITH WORD', { word, curr, prev })
+
+                // Place word
+                this.placeWordOnGrid(curr, word)
+
+                // Check that all remaining cells are connected
+                // (not strictly necessary, but a helpful measure)
+
+                // for (let row of curr) console.log(row.join(' '))
+                const allConnected = this.allRemainingConnected(curr)
+                // console.log(allConnected)
+
+                if (allConnected) break // Onto next word!
+                // If not, try again
+
+                // console.log('PREV')
+
+                // for (let row of prev) console.log(row.join(' '))
+                // console.log('CURR')
+
+                // for (let row of curr) console.log(row.join(' '))
+
+                // throw 'aaaa'
+                curr = this.copyGrid(prev)
+            }
+            prev = this.copyGrid(curr)
+        }
+
+        return curr
+    }
+
+    private static allRemainingConnected(grid: string[][]) {
+        // Iterate over grid and flood fill from all empty. If two unvisited empties are found, boooo
+        const visited = new Set<string>()
+        for (let y = 0; y < grid.length; y++) {
+            for (let x = 0; x < grid[y].length; x++) {
+                if (grid[y][x] !== '') continue
+                // const key = `${x},${y}`
+                // if (visited.size && !visited.has(key)) return false // BOOOO
+                this.floodFillEmpty(grid, visited, x, y)
+                return visited.size === this.findEmpty(grid).length
+            }
+        }
+        return true // Yay, after first flood fill, no more unvisited empties were found
+    }
+
+    private static floodFillEmpty(
+        grid: string[][],
+        visited: Set<string>,
+        x: number,
+        y: number
+    ) {
+        if (grid[y]?.[x] === undefined) return // Out of bounds
+        if (grid[y][x] !== '') return // Only interested in empties
+        const key = `${x},${y}`
+        if (visited.has(key)) return // Already visited
+        visited.add(key)
+
+        for (let [nx, ny] of this.getNeighbors2(x, y)) {
+            this.floodFillEmpty(grid, visited, nx, ny)
+        }
+    }
+
+    private static placeWordOnGrid(grid: string[][], word: string) {
+        // Find remaining cells
+        const empty = shuffle(this.findEmpty(grid))
+
+        // while (true) {
+        for (let [x, y] of empty) {
+            // console.log('PLACE WORD ON GRID', { grid, word })
+            // console.log('aaa', grid.length, grid[0].length)
+
+            // for (let row of grid) console.log(row.join(' '))
+            // if (word === 'tiny') throw 'tiny'
+
+            // Choose one at random as a starting point
+            // const [x, y] = empty[Math.floor(Math.random() * empty.length)]
+            const ok = this.placeLettersOnGrid(grid, word, x, y)
+            if (ok) return // Done
+        }
+    }
+
+    private static placeLettersOnGrid(
+        grid: string[][],
+        letters: string,
+        x: number,
+        y: number
+    ): boolean {
+        if (!letters) return true // Done
+        if (grid[y]?.[x] === undefined) return false // Out of bounds
+        if (grid[y][x] !== '') return false // Already occupied
+
+        grid[y][x] = letters[0]
+
+        const neighbors = this.getNeighbors2(x, y)
+        for (let [nx, ny] of neighbors) {
+            if (this.placeLettersOnGrid(grid, letters.slice(1), nx, ny))
+                return true
+        }
+
+        grid[y][x] = '' // Didn't work out, reset
+        return false
+    }
+
+    private static findEmpty(grid: string[][]) {
+        const empty: [number, number][] = []
+        for (let y = 0; y < grid.length; y++) {
+            for (let x = 0; x < grid[y].length; x++) {
+                if (grid[y][x] === '') empty.push([x, y])
+            }
+        }
+        return empty
+    }
+
+    private static copyGrid(grid: string[][]) {
+        return grid.map((row) => row.map((cell) => cell))
+    }
+
     private static placeSolutionOnGrid(
         grid: string[][],
         placed: Set<string>,
@@ -304,7 +445,7 @@ export class BoardService {
         x: number,
         y: number
     ) {
-        console.log('placeSolutionOnGrid', { grid, placed, letters, x, y })
+        // console.log('placeSolutionOnGrid', { grid, placed, letters, x, y })
 
         const key = `${x},${y}`
         if (placed.has(key)) return
@@ -312,7 +453,7 @@ export class BoardService {
 
         grid[y][x] = letters[0]
         placed.add(key)
-        console.log('WHAT"', placed.size, grid[0].length * grid.length)
+        // console.log('WHAT"', placed.size, grid[0].length * grid.length)
 
         if (placed.size === grid[0].length * grid.length) return true
 

@@ -20,7 +20,7 @@ export class WordsService {
     ) => void
 
     constructor(private http: HttpClient) {
-        console.log('CONSTR WORD')
+        // console.log('CONSTR WORD')
 
         WordsService.ready = new Promise(async (res, rej) => {
             WordsService.words = {
@@ -36,7 +36,7 @@ export class WordsService {
         const data = await firstValueFrom(
             this.http.get(`assets/${fileName}`, { responseType: 'text' })
         )
-        console.log('data', data)
+        // console.log('data', data)
         const words = data.split(/[\r\n]+/)
 
         return WordsService.makeDictionary(words)
@@ -78,5 +78,31 @@ export class WordsService {
         let dict = WordsService.words.huge.dictionary
         for (let char of word) dict = dict?.[char]
         return !!dict?.isWord
+    }
+
+    // Gets a list of random words with a combined number of total letters
+    // where each word has a minimum number of letters
+    public static getRandomWords(totalChars: number, minChars: number) {
+        let wordList = WordsService.words.medium.list.filter(
+            (word) => word.length >= minChars
+        )
+        const words = []
+        let chars = 0
+        while (chars < totalChars) {
+            wordList = wordList.filter(
+                (word) => word.length <= totalChars - chars
+            )
+            let word = wordList[Math.floor(Math.random() * wordList.length)]
+            if (!word && totalChars - chars < minChars)
+                word = WordsService.getRandomWordOfLength(
+                    'medium',
+                    totalChars - chars
+                )
+
+            words.push(word)
+            chars += word.length
+        }
+
+        return words
     }
 }

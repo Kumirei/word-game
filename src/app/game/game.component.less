@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    padding: 1em;
 }
 
 .row {
@@ -33,20 +34,32 @@
     background-color: red;
 }
 
-input {
+.guess {
     padding: 0.25rem;
     font-size: 2rem;
     text-transform: uppercase;
-    border-radius: 0%;
     border-radius: 0.25em;
+    border: 1px solid black;
+    width: 50vw;
+    height: 1.5em;
+    background-color: lightgray;
+    text-align: center;
 }
 
-input.wrongAnswer {
+.guess.active {
+    background: white;
+}
+
+.guesses .wrongAnswer {
     /* Start the shake animation and make the animation last for 0.5 seconds */
     animation: shake 0.5s;
 
     /* When the animation is finished, start again */
     animation-iteration-count: infinite;
+}
+
+.solution {
+    font-size: 2em;
 }
 
 @keyframes shake {

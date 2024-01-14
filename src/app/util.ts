@@ -13,3 +13,7 @@ export function group<T>(arr: T[], groupSize: number): T[][] {
         return groups
     }, [] as T[][])
 }
+
+export function arrayRandom<T extends unknown>(arr: T[]) {
+    return arr[Math.floor(Math.random() * arr.length)]
+}

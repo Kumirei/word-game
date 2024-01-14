@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { firstValueFrom } from 'rxjs'
+import { arrayRandom } from './util'
 
 export type DictionaryEntry = { isWord?: boolean } & {
     [key: string]: DictionaryEntry
@@ -99,6 +100,34 @@ export class WordsService {
                     totalChars - chars
                 )
 
+            words.push(word)
+            chars += word.length
+        }
+
+        return words
+    }
+
+    public static getRandomWordsOfLength(
+        totalChars: number,
+        wordCount: number
+    ) {
+        const charsPerWordCeil = Math.ceil(totalChars / wordCount)
+        const charsPerWordFloor = Math.floor(totalChars / wordCount)
+        const words = []
+        let chars = 0
+        const wordListCeil = WordsService.words.medium.list.filter(
+            (word) => word.length === charsPerWordCeil
+        )
+        const wordListFloor = WordsService.words.medium.list.filter(
+            (word) => word.length === charsPerWordFloor
+        )
+        while (chars < totalChars) {
+            const wordLength = Math.ceil(
+                (totalChars - chars) / (wordCount - words.length)
+            )
+            const word = arrayRandom(
+                wordLength === charsPerWordCeil ? wordListCeil : wordListFloor
+            )
             words.push(word)
             chars += word.length
         }

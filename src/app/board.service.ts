@@ -28,14 +28,21 @@ export class BoardService {
         // let letters: string = ''
         // while (true) {
         // Try to get a word which can cover the whole board
-        const word =
-            (Math.random() < 0.1 &&
-                WordsService.getRandomWordOfLength('huge', wordLength)) ||
-            ''
-        // let letters = ''
-        const solution = word
-            ? [word]
-            : WordsService.getRandomWords(wordLength, 9)
+        // const word =
+        //     (Math.random() < 0.1 &&
+        //         WordsService.getRandomWordOfLength('huge', wordLength)) ||
+        //     ''
+        // // let letters = ''
+        // const solution = word
+        //     ? [word]
+        //     : WordsService.getRandomWords(wordLength, 9)
+        const wordCount = new Date().getDay() + 1
+        // const wordCount = 7
+        console.log('WORD COUNT', wordCount)
+        const solution = WordsService.getRandomWordsOfLength(
+            wordLength,
+            wordCount
+        )
         // const solution = WordsService.getRandomWords(wordLength, 9)
         // Get random words to fill grid
         // Words should in general be at least 6 letters?
@@ -256,7 +263,6 @@ export class BoardService {
         y: number,
         guessCount: number
     ): boolean {
-        alert('apply guess ' + state)
         if (!guess) return true
         const cell = board[y]?.[x]
         if (!cell || cell.char !== guess[0]) return false
@@ -314,42 +320,42 @@ export class BoardService {
         size: [number, number],
         words: string[]
     ) {
-        // console.log(size)
+        let states = [this.getEmptyGrid(size)]
+        for (let w = 0; w < words.length; true) {
+            const word = words[w]
+            const state = states[w]
+            const { ok, grid } = this.placeWordOnGrid(
+                this.copyGrid(state),
+                word
+            )
 
-        // return []
-        let prev = this.getEmptyGrid(size)
-        let curr = this.copyGrid(prev)
-        for (let word of words) {
-            while (true) {
-                // console.log('CREATE GRID WITH WORD', { word, curr, prev })
-
-                // Place word
-                this.placeWordOnGrid(curr, word)
-
-                // Check that all remaining cells are connected
-                // (not strictly necessary, but a helpful measure)
-
-                // for (let row of curr) console.log(row.join(' '))
-                const allConnected = this.allRemainingConnected(curr)
-                // console.log(allConnected)
-
-                if (allConnected) break // Onto next word!
-                // If not, try again
-
-                // console.log('PREV')
-
-                // for (let row of prev) console.log(row.join(' '))
-                // console.log('CURR')
-
-                // for (let row of curr) console.log(row.join(' '))
-
-                // throw 'aaaa'
-                curr = this.copyGrid(prev)
+            if (ok) {
+                // Next word
+                states.push(this.copyGrid(grid))
+                w++
+            } else {
+                // Start over
+                states = [this.getEmptyGrid(size)]
+                w = 0
             }
-            prev = this.copyGrid(curr)
         }
 
-        return curr
+        return states[states.length - 1]
+    }
+
+    private static logBoard(board: string[][]) {
+        console.log(
+            ' ' +
+                new Array(board[0].length)
+                    .fill(null)
+                    .map((_, i) => i)
+                    .join('')
+        )
+        for (let y = 0; y < board.length; y++) {
+            console.log(
+                y + board[y].map((cell) => (cell === '' ? ' ' : cell)).join('')
+            )
+        }
     }
 
     private static allRemainingConnected(grid: string[][]) {
@@ -387,20 +393,17 @@ export class BoardService {
     private static placeWordOnGrid(grid: string[][], word: string) {
         // Find remaining cells
         const empty = shuffle(this.findEmpty(grid))
+        const original = this.copyGrid(grid)
 
-        // while (true) {
         for (let [x, y] of empty) {
-            // console.log('PLACE WORD ON GRID', { grid, word })
-            // console.log('aaa', grid.length, grid[0].length)
-
-            // for (let row of grid) console.log(row.join(' '))
-            // if (word === 'tiny') throw 'tiny'
-
             // Choose one at random as a starting point
             // const [x, y] = empty[Math.floor(Math.random() * empty.length)]
-            const ok = this.placeLettersOnGrid(grid, word, x, y)
-            if (ok) return // Done
+            const placed = this.placeLettersOnGrid(grid, word, x, y)
+            const open = placed && this.allRemainingConnected(grid)
+            if (placed && open) return { ok: true, grid } // Done
+            else grid = this.copyGrid(original)
         }
+        return { ok: false, grid }
     }
 
     private static placeLettersOnGrid(

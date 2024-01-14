@@ -220,7 +220,7 @@ export class BoardService {
         guesses: string[]
     ) {
         for (let i = 0; i < guesses.length; i++) {
-            const guess = guesses[i]
+            const guess = guesses[i].toLowerCase()
             // Find start of word, then traverse all possible paths to create word
             for (let y = 0; y < board.length; y++) {
                 for (let x = 0; x < board[y].length; x++) {
@@ -256,6 +256,7 @@ export class BoardService {
         y: number,
         guessCount: number
     ): boolean {
+        alert('apply guess ' + state)
         if (!guess) return true
         const cell = board[y]?.[x]
         if (!cell || cell.char !== guess[0]) return false

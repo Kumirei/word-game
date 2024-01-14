@@ -27,7 +27,6 @@ export class GameComponent implements OnInit {
     sizes = [3, 4, 5, 6, 7, 8, 9, 10, 15, 20]
     isInit = false
     board: string[][] = []
-    // possibleWords: Set<string> = new Set()
     solution: string[] = []
     state: { char: string; state: number; color: string }[][] = []
     guesses: string[] = ['']
@@ -53,30 +52,21 @@ export class GameComponent implements OnInit {
         this.state = this.board.map((row) =>
             row.map((cell) => ({ char: cell, state: 0, color: '' }))
         )
-        // this.possibleWords = new Set(possibleWords)
         this.solution = solution
         this.guesses = ['']
         this.isInit = true
         this.updateColors()
         this.solved = false
         this.changeDetector.detectChanges()
-
-        // this.wordInputs.first.nativeElement.focus()
     }
 
     @HostListener('document:keydown', ['$event'])
     onType(event: KeyboardEvent) {
         console.log('KEYDOWN', event)
         this.focusInput()
-        // if (!/^[a-zA-Z]$/.test(event.key)) return
-        // this.guesses[this.guesses.length - 1] += event.key.toLowerCase()
-        // this.onInput(this.guesses.at(-1) || '')
     }
 
     onInput(text: string) {
-        // console.log('TESXT', text)
-
-        // if (!this.guesses.length) this.guesses = ['']
         this.refreshBoard()
     }
 
@@ -115,8 +105,6 @@ export class GameComponent implements OnInit {
         this.updateColors()
 
         this.changeDetector.detectChanges()
-
-        // this.focusInput(num + 1)
     }
 
     updateColors() {
@@ -136,21 +124,6 @@ export class GameComponent implements OnInit {
             this.guesses.pop()
             event.preventDefault() // Don't delete on previous word
         }
-        // else
-        //     this.guesses[this.guesses.length - 1] = this.guesses[
-        //         this.guesses.length - 1
-        //     ].slice(0, -1)
-        // this.onInput(this.guesses.at(-1) || '')
-        // if (this.guesses[i] === '') {
-        //     // If guess was blank BEFORE backspace
-        //     // console.log('BACKSPACE', event, this.guesses[i], i)
-        //     if (i !== 0) {
-        //         // Ignore if first input
-        //         this.guesses.pop()
-        //         this.focusInput(i - 1)
-        //         event.preventDefault() // Avoid deleting in new input field
-        //     }
-        // }
     }
 
     isSolved() {

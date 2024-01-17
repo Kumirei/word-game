@@ -12,7 +12,7 @@ export type DictionaryEntry = { isWord?: boolean } & {
 })
 export class WordsService {
     public static words: Record<
-        'small' | 'medium' | 'huge',
+        'small' | 'medium' | 'large' | 'huge',
         { list: string[]; dictionary: DictionaryEntry }
     > = {} as any
     public static ready: Promise<boolean>
@@ -27,10 +27,12 @@ export class WordsService {
             WordsService.words = {
                 small: await this.loadWords('words3k.txt'),
                 medium: await this.loadWords('words10k.txt'),
+                large: await this.loadWords('words30k.txt'),
                 huge: await this.loadWords('words370k.txt'),
             }
             res(true)
         })
+        window.WordsService = WordsService
     }
 
     private async loadWords(fileName: string) {
@@ -84,7 +86,7 @@ export class WordsService {
     // Gets a list of random words with a combined number of total letters
     // where each word has a minimum number of letters
     public static getRandomWords(totalChars: number, minChars: number) {
-        let wordList = WordsService.words.medium.list.filter(
+        let wordList = WordsService.words.large.list.filter(
             (word) => word.length >= minChars
         )
         const words = []
@@ -96,7 +98,7 @@ export class WordsService {
             let word = wordList[Math.floor(Math.random() * wordList.length)]
             if (!word && totalChars - chars < minChars)
                 word = WordsService.getRandomWordOfLength(
-                    'medium',
+                    'large',
                     totalChars - chars
                 )
 
@@ -115,10 +117,10 @@ export class WordsService {
         const charsPerWordFloor = Math.floor(totalChars / wordCount)
         const words = []
         let chars = 0
-        const wordListCeil = WordsService.words.medium.list.filter(
+        const wordListCeil = WordsService.words.large.list.filter(
             (word) => word.length === charsPerWordCeil
         )
-        const wordListFloor = WordsService.words.medium.list.filter(
+        const wordListFloor = WordsService.words.large.list.filter(
             (word) => word.length === charsPerWordFloor
         )
         while (chars < totalChars) {

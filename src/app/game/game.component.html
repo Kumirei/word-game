@@ -7,7 +7,10 @@
             <option *ngFor="let s of sizes" [ngValue]="s">{{ s }}</option>
         </select>
     </div> -->
-    <p class="hint">{{ solution.length }} words = cookie</p>
+    <p class="hint">
+        {{ solution.length }} word{{ solution.length === 1 ? '' : 's' }} =
+        cookie
+    </p>
 
     <div>
         <div *ngFor="let row of state; let y = index" class="row">

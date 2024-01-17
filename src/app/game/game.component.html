@@ -7,12 +7,16 @@
             <option *ngFor="let s of sizes" [ngValue]="s">{{ s }}</option>
         </select>
     </div> -->
+    <p class="hint">{{ solution.length }} words = cookie</p>
 
     <div>
-        <div *ngFor="let row of state" class="row">
+        <div *ngFor="let row of state; let y = index" class="row">
             <div
-                *ngFor="let cell of row"
+                #cell
+                *ngFor="let cell of row; let x = index"
                 class="cell"
+                [attr.data-x]="x"
+                [attr.data-y]="y"
                 [attr.data-state]="cell.state"
                 [style.backgroundColor]="colors[cell.state - 1]"
             >

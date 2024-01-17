@@ -223,26 +223,38 @@ export class BoardService {
     }
 
     public static applyGuesses(
-        board: { char: string; state: number; color: string }[][],
+        board: {
+            char: string
+            state: number
+            color: string
+            step: Set<number>
+        }[][],
         guesses: string[]
     ) {
+        let chars = 0
+        let possible = false
         for (let i = 0; i < guesses.length; i++) {
             const guess = guesses[i].toLowerCase()
             // Find start of word, then traverse all possible paths to create word
             for (let y = 0; y < board.length; y++) {
                 for (let x = 0; x < board[y].length; x++) {
                     if (board[y][x].char !== guess[0]) continue
-                    BoardService.applyGuess(
+                    const ok = BoardService.applyGuess(
                         board,
                         i + 1,
                         guess.toLowerCase(),
                         x,
                         y,
-                        guesses.length
+                        guesses.length,
+                        chars
                     )
+
+                    possible = ok && i === guesses.length - 1
                 }
             }
+            chars += guess.length
         }
+        return possible
     }
 
     public static getNeighbors(board: any[][], x: number, y: number) {
@@ -256,12 +268,18 @@ export class BoardService {
     }
 
     public static applyGuess(
-        board: { char: string; state: number; color: string }[][],
+        board: {
+            char: string
+            state: number
+            color: string
+            step: Set<number>
+        }[][],
         state: number,
         guess: string,
         x: number,
         y: number,
-        guessCount: number
+        guessCount: number,
+        step: number // number of already applied characters
     ): boolean {
         if (!guess) return true
         const cell = board[y]?.[x]
@@ -275,7 +293,8 @@ export class BoardService {
                     guess.slice(1),
                     nx,
                     ny,
-                    guessCount
+                    guessCount,
+                    step + 1
                 )
             )
             .some((a) => a)
@@ -290,7 +309,10 @@ export class BoardService {
         //     //     red
         //     // )(state / ((board[0].length * board.length) / 3))
         // }
-        if (makesWord) cell.state = state
+        if (makesWord) {
+            cell.state = state
+            cell.step.add(step)
+        }
         return makesWord
     }
 

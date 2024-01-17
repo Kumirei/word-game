@@ -17,3 +17,7 @@ export function group<T>(arr: T[], groupSize: number): T[][] {
 export function arrayRandom<T extends unknown>(arr: T[]) {
     return arr[Math.floor(Math.random() * arr.length)]
 }
+
+export function delay(ms: number = 0): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+}

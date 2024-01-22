@@ -23,7 +23,10 @@ for (let word of medium) {
 }
 
 console.log(Array.from(smallExtra).length)
-console.log(large.filter((w) => w.length <= 4).length)
+console.log(large.filter((w) => w.length >= 16 / 1).length)
+console.log(large.filter((w) => w.length >= 16 / 2).length)
+console.log(large.filter((w) => w.length >= 16 / 3).length)
+console.log(large.filter((w) => w.length >= 16 / 4).length)
 // console.log(Array.from(largeExtra).join('\n'))
 // console.log(huge)
 

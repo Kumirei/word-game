@@ -23,21 +23,44 @@ export class BoardService {
         console.time('getBoard')
         const wordLength = size[0] * size[1]
 
-        // If it is possible to make board with just one word, decide whether to do it randomly
-        const wordsOfFullLength = WordsService.words.large.list.filter(
-            (word) => word.length === wordLength
-        ).length
-        const single = Math.random() < wordsOfFullLength / 1000 // If we have at least 1000 words this length, always use one word
+        // Choose number of words base on a few parameters and chance
+        let wordCount = 0
+        while (!wordCount) {
+            let i = 1
 
-        // Otherwise, choose number of words randomly around a midpoint
-        const wordCountCeil = Math.ceil(wordLength / 4)
-        const wordCountFloor = Math.floor(wordLength / 12)
-        const wordCountRandom = randomNumberBetween(
-            wordCountFloor,
-            wordCountCeil
-        )
+            let length = Math.round(wordLength / i)
+            while (length >= 4) {
+                // Min 4 chars per word
+                const wordsOfLength = WordsService.words.large.list.filter(
+                    (w) => w.length === length
+                ).length
+                const odds = (wordsOfLength > 500 ? 500 : wordsOfLength) / 1000
+                console.log('ODDS', { i, length, wordsOfLength, odds })
+                if (Math.random() < odds) {
+                    wordCount = i
+                    break
+                }
+                i++
+                length = Math.round(wordLength / i)
+            }
+        }
+        console.log('word count', wordCount)
 
-        const wordCount = single ? 1 : wordCountRandom
+        // // If it is possible to make board with just one word, decide whether to do it randomly
+        // const wordsOfFullLength = WordsService.words.large.list.filter(
+        //     (word) => word.length === wordLength
+        // ).length
+        // const single = Math.random() < wordsOfFullLength / 1000 // If we have at least 1000 words this length, always use one word
+
+        // // Otherwise, choose number of words randomly around a midpoint
+        // const wordCountCeil = Math.ceil(wordLength / 4)
+        // const wordCountFloor = Math.floor(wordLength / 12)
+        // const wordCountRandom = randomNumberBetween(
+        //     wordCountFloor,
+        //     wordCountCeil
+        // )
+
+        // const wordCount = single ? 1 : wordCountRandom
 
         console.log('WORD COUNT', wordCount)
         const solution = WordsService.getRandomWordsOfLength(

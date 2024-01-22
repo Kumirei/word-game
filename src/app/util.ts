@@ -21,3 +21,7 @@ export function arrayRandom<T extends unknown>(arr: T[]) {
 export function delay(ms: number = 0): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms))
 }
+
+export function randomNumberBetween(start: number, end: number) {
+    return Math.floor(Math.random() * (end + 1 - start)) + start
+}

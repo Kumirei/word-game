@@ -23,7 +23,7 @@ for (let word of medium) {
 }
 
 console.log(Array.from(smallExtra).length)
-console.log(huge.includes('tit'))
+console.log(large.filter((w) => w.length <= 4).length)
 // console.log(Array.from(largeExtra).join('\n'))
 // console.log(huge)
 

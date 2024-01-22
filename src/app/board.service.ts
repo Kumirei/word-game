@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { DictionaryEntry, WordsService } from './words.service'
-import { group, shuffle } from './util'
+import { group, randomNumberBetween, shuffle } from './util'
 import * as d3 from 'd3'
 
 @Injectable({
@@ -22,68 +22,34 @@ export class BoardService {
     public static getRandomBoard(size: [number, number] = [4, 4]) {
         console.time('getBoard')
         const wordLength = size[0] * size[1]
-        // let grid: string[][]
-        // let possibleWords: Record<string, Set<string>>
-        // let possibleWordsSmall: Record<string, Set<string>>
-        // let letters: string = ''
-        // while (true) {
-        // Try to get a word which can cover the whole board
-        // const word =
-        //     (Math.random() < 0.1 &&
-        //         WordsService.getRandomWordOfLength('huge', wordLength)) ||
-        //     ''
-        // // let letters = ''
-        // const solution = word
-        //     ? [word]
-        //     : WordsService.getRandomWords(wordLength, 9)
-        const wordCount = new Date().getDay() + 1
-        // const wordCount = 7
+
+        // If it is possible to make board with just one word, decide whether to do it randomly
+        const wordsOfFullLength = WordsService.words.large.list.filter(
+            (word) => word.length === wordLength
+        ).length
+        const single = Math.random() < wordsOfFullLength / 1000 // If we have at least 1000 words this length, always use one word
+
+        // Otherwise, choose number of words randomly around a midpoint
+        const wordCountCeil = Math.ceil(wordLength / 3)
+        const wordCountFloor = Math.floor(wordLength / 12)
+        const wordCountRandom = randomNumberBetween(
+            wordCountFloor,
+            wordCountCeil
+        )
+
+        const wordCount = single ? 1 : wordCountRandom
+
         console.log('WORD COUNT', wordCount)
         const solution = WordsService.getRandomWordsOfLength(
             wordLength,
             wordCount
         )
-        // const solution = WordsService.getRandomWords(wordLength, 9)
-        // Get random words to fill grid
-        // Words should in general be at least 6 letters?
-        // const solution = WordsService.getRandomWords(wordLength, 6)
-        // DFS put letters into grid until it works
-        // grid = BoardService.createGridWithSolution(size, letters)
         const grid = BoardService.createGridWithWords(size, solution)
-        // console.log('GRIDDDDD', grid)
-        // const possibleWords = BoardService.findWordsInGrid('small', grid)
-        // break
-        // }
-        // If that is not possible, use random words
-        // else {
-        //     while (!letters || letters.length < wordLength) {
-        //         letters = (letters + WordsService.getRandomWord()).slice(
-        //             0,
-        //             wordLength
-        //         )
-        //     }
-        //     grid = group(shuffle(letters.split('')), size[0])
-        //     possibleWords = BoardService.findWordsInGrid('small', grid)
-        //     if (this.isSolvable(grid, possibleWords)) break
-        // }
-
-        // possibleWords = BoardService.findWordsInGrid('huge', grid)
-        // console.log('WORD', letters)
-        // }
-        // console.timeLog('getBoard', 'solvable')
-
-        // let solution = BoardService.findASolution(grid, possibleWords)
-        // console.timeLog('getBoard', 'solution')
-
-        // const solutionWords = solution
-        //     .map((a) => a[0])
-        // .sort((a, b) => b.length - a.length)
         console.timeEnd('getBoard')
         console.log('SOLUTION', solution)
 
         return {
             grid,
-            // possibleWords: Object.keys(possibleWords),
             solution,
         }
     }
@@ -235,7 +201,6 @@ export class BoardService {
         let lastGuessPossible = false
         for (let i = 0; i < guesses.length; i++) {
             const guess = guesses[i].toLowerCase()
-            let guessPossible = false
             // Find start of word, then traverse all possible paths to create word
             for (let y = 0; y < board.length; y++) {
                 for (let x = 0; x < board[y].length; x++) {

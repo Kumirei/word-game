@@ -200,7 +200,12 @@ export class GameComponent implements OnInit {
     async keepBumping() {
         const chars = this.guesses.join('').length
         while (this.solved) {
-            await this.bumpChars(0, chars)
+            let bumped = 0
+            for (let word of this.guesses) {
+                await this.bumpChars(bumped, bumped + word.length - 1)
+                await delay(500)
+                bumped += word.length
+            }
             await delay(2000)
         }
     }

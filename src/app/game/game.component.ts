@@ -34,7 +34,7 @@ export class GameComponent implements OnInit {
         char: string
         state: number
         color: string
-        step: Set<number>
+        step: Record<number, number>
     }[][] = []
     guesses: string[] = ['']
     solved: boolean = false
@@ -62,7 +62,7 @@ export class GameComponent implements OnInit {
                 char: cell,
                 state: 0,
                 color: '',
-                step: new Set<number>(),
+                step: {},
             }))
         )
         this.solution = solution
@@ -93,7 +93,7 @@ export class GameComponent implements OnInit {
             for (let cell of row) {
                 cell.state = 0
                 cell.color = ''
-                cell.step = new Set()
+                cell.step = {}
             }
         }
     }
@@ -129,25 +129,27 @@ export class GameComponent implements OnInit {
     }
 
     async bumpChars(start: number, end: number) {
-        const bumps: Record<number, [number, number][]> = {}
+        const bumps: Record<number, [number, number, number][]> = {}
         for (let i = start; i <= end; i++) bumps[i] = []
 
         for (let y = 0; y < this.state.length; y++) {
             for (let x = 0; x < this.state[y].length; x++) {
                 const cell = this.state[y][x]
-                for (let step of cell.step) {
-                    if (step >= start && step <= end) bumps[step].push([x, y])
+                for (let [s, multiplicity] of Object.entries(cell.step)) {
+                    const step = Number(s)
+                    if (step >= start && step <= end)
+                        bumps[step].push([x, y, multiplicity])
                 }
             }
         }
 
         for (let step = start; step <= end; step++) {
-            for (let [x, y] of bumps[step]) this.bumpChar(x, y)
+            for (let [x, y, m] of bumps[step]) this.bumpChar(x, y, m)
             await delay(200)
         }
     }
 
-    async bumpChar(x: number, y: number) {
+    async bumpChar(x: number, y: number, multiplicity: number) {
         const cell = this.cells.find((cell) => {
             const data = cell.nativeElement.dataset
             const ex = Number(data.x)
@@ -155,8 +157,13 @@ export class GameComponent implements OnInit {
             return x === ex && y === ey
         })
         cell?.nativeElement.classList.add('bump')
+        cell?.nativeElement.style.setProperty(
+            '--bounce-amplitude',
+            multiplicity
+        )
         await delay(400)
         cell?.nativeElement.classList.remove('bump')
+        cell?.nativeElement.style.removeProperty('--bounce-amplitude')
     }
 
     updateColors() {

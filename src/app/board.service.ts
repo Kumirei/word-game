@@ -227,14 +227,15 @@ export class BoardService {
             char: string
             state: number
             color: string
-            step: Set<number>
+            step: Record<number, number>
         }[][],
         guesses: string[]
     ) {
         let chars = 0
-        let possible = false
+        let lastGuessPossible = false
         for (let i = 0; i < guesses.length; i++) {
             const guess = guesses[i].toLowerCase()
+            let guessPossible = false
             // Find start of word, then traverse all possible paths to create word
             for (let y = 0; y < board.length; y++) {
                 for (let x = 0; x < board[y].length; x++) {
@@ -248,13 +249,12 @@ export class BoardService {
                         guesses.length,
                         chars
                     )
-
-                    possible = ok && i === guesses.length - 1
+                    if (ok && i === guesses.length - 1) lastGuessPossible = true
                 }
             }
             chars += guess.length
         }
-        return possible
+        return lastGuessPossible
     }
 
     public static getNeighbors(board: any[][], x: number, y: number) {
@@ -272,7 +272,7 @@ export class BoardService {
             char: string
             state: number
             color: string
-            step: Set<number>
+            step: Record<number, number>
         }[][],
         state: number,
         guess: string,
@@ -311,7 +311,8 @@ export class BoardService {
         // }
         if (makesWord) {
             cell.state = state
-            cell.step.add(step)
+            cell.step[step] = (cell.step[step] || 0) + 1
+            console.log('CELL', cell, guess)
         }
         return makesWord
     }

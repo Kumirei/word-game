@@ -20,6 +20,7 @@
     aspect-ratio: 50px;
     text-transform: capitalize;
     text-align: center;
+    transition: transform 0.25s ease-in-out;
 }
 
 .guesses {
@@ -71,10 +72,11 @@ input:disabled {
 }
 
 .bump {
-    animation-duration: 0.5s;
-    animation-name: bounce;
-    animation-timing-function: ease;
+    // animation-duration: 0.5s;
+    // animation-name: bounce;
+    // animation-timing-function: ease;
     // animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
+    transform: translateY(calc(-20% * var(--bounce-amplitude, 1)));
 }
 
 @keyframes bounce {
@@ -82,7 +84,7 @@ input:disabled {
         transform: translateY(0);
     }
     30% {
-        transform: translateY(-20%);
+        transform: translateY(calc(-20% * var(--bounce-amplitude, 1)));
     }
     50% {
         transform: translateY(0);

@@ -30,7 +30,7 @@ export class BoardService {
         const single = Math.random() < wordsOfFullLength / 1000 // If we have at least 1000 words this length, always use one word
 
         // Otherwise, choose number of words randomly around a midpoint
-        const wordCountCeil = Math.ceil(wordLength / 3)
+        const wordCountCeil = Math.ceil(wordLength / 4)
         const wordCountFloor = Math.floor(wordLength / 12)
         const wordCountRandom = randomNumberBetween(
             wordCountFloor,

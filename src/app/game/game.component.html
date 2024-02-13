@@ -28,7 +28,18 @@
         </div>
     </div>
     <div *ngIf="solved" class="solution">
-        <span>Solution: {{ solution.join(', ').toUpperCase() }}</span>
+        <span
+            >Solution:
+            <span *ngFor="let word of solution; last as last">
+                <a
+                    href="https://www.merriam-webster.com/dictionary/{{ word }}"
+                    target="_blank"
+                >
+                    {{ word | uppercase }}
+                </a>
+                {{ last ? '' : ',' }}
+            </span>
+        </span>
     </div>
     <div class="guesses flex column reverse">
         <span

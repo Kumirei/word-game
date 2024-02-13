@@ -12,7 +12,8 @@ export type DictionaryEntry = { isWord?: boolean } & {
 })
 export class WordsService {
     public static words: Record<
-        'small' | 'medium' | 'large' | 'huge',
+        'large',
+        // 'small' | 'medium' | 'large' | 'huge',
         { list: string[]; dictionary: DictionaryEntry }
     > = {} as any
     public static ready: Promise<boolean>
@@ -25,10 +26,10 @@ export class WordsService {
 
         WordsService.ready = new Promise(async (res, rej) => {
             WordsService.words = {
-                small: await this.loadWords('words3k.txt'),
-                medium: await this.loadWords('words10k.txt'),
+                // small: await this.loadWords('words3k.txt'),
+                // medium: await this.loadWords('words10k.txt'),
                 large: await this.loadWords('words30k.txt'),
-                huge: await this.loadWords('words370k.txt'),
+                // huge: await this.loadWords('words370k.txt'),
             }
             res(true)
         })
@@ -71,14 +72,14 @@ export class WordsService {
     }
 
     public static getRandomWord(
-        words: string[] = WordsService.words.small.list
+        words: string[] = WordsService.words.large.list
     ) {
         const alphaWords = words.filter((word) => !/[^\w]/.test(word))
         return alphaWords[Math.floor(alphaWords.length * Math.random())]
     }
 
     public static isWord(word: string) {
-        let dict = WordsService.words.huge.dictionary
+        let dict = WordsService.words.large.dictionary
         for (let char of word) dict = dict?.[char]
         return !!dict?.isWord
     }

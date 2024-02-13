@@ -157,10 +157,7 @@ export class GameComponent implements OnInit {
             return x === ex && y === ey
         })
         cell?.nativeElement.classList.add('bump')
-        cell?.nativeElement.style.setProperty(
-            '--bounce-amplitude',
-            multiplicity
-        )
+        cell?.nativeElement.style.setProperty('--bounce-amplitude', 1)
         await delay(400)
         cell?.nativeElement.classList.remove('bump')
         cell?.nativeElement.style.removeProperty('--bounce-amplitude')

@@ -220,6 +220,8 @@ export class BoardService {
         }[][],
         guesses: string[]
     ) {
+        console.log('AAPLY GEUSSE', { board, guesses })
+
         let chars = 0
         let lastGuessPossible = false
         for (let i = 0; i < guesses.length; i++) {
@@ -272,6 +274,15 @@ export class BoardService {
         if (!guess) return true
         const cell = board[y]?.[x]
         if (!cell || cell.char !== guess[0]) return false
+        console.log('apply guess', {
+            board,
+            state,
+            guess,
+            x,
+            y,
+            guessCount,
+            step,
+        })
 
         const makesWord = BoardService.getNeighbors(board, x, y)
             .map(([nx, ny]) =>
@@ -286,17 +297,6 @@ export class BoardService {
                 )
             )
             .some((a) => a)
-        // if (!cell.state && makesWord) {
-        //     cell.state = state
-        //     // console.log('SATE', x, y, state)
-
-        //     // const green = d3.rgb(136, 255, 141)
-        //     // const red = d3.rgb(255, 136, 136)
-        //     // cell.color = d3.interpolate(
-        //     //     green,
-        //     //     red
-        //     // )(state / ((board[0].length * board.length) / 3))
-        // }
         if (makesWord) {
             cell.state = state
             cell.step[step] = (cell.step[step] || 0) + 1

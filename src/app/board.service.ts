@@ -69,7 +69,12 @@ export class BoardService {
         // )
         const solution = new Array(4)
             .fill(null)
-            .map(WordsService.getRandomWordOfLength.bind(this, 'large', 4))
+            .map(
+                WordsService.getRandomWord.bind(
+                    this,
+                    WordsService.words.four.list
+                )
+            )
         const grid = BoardService.createGridWithWords(size, solution)
         console.timeEnd('getBoard')
         console.log('SOLUTION', solution)

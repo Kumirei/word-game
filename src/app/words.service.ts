@@ -12,7 +12,7 @@ export type DictionaryEntry = { isWord?: boolean } & {
 })
 export class WordsService {
     public static words: Record<
-        'large',
+        'large' | 'four',
         // 'small' | 'medium' | 'large' | 'huge',
         { list: string[]; dictionary: DictionaryEntry }
     > = {} as any
@@ -29,6 +29,7 @@ export class WordsService {
                 // small: await this.loadWords('words3k.txt'),
                 // medium: await this.loadWords('words10k.txt'),
                 large: await this.loadWords('words30k.txt'),
+                four: await this.loadWords('words4.txt'),
                 // huge: await this.loadWords('words370k.txt'),
             }
             res(true)

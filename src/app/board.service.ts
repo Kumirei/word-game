@@ -63,10 +63,13 @@ export class BoardService {
         // const wordCount = single ? 1 : wordCountRandom
 
         console.log('WORD COUNT', wordCount)
-        const solution = WordsService.getRandomWordsOfLength(
-            wordLength,
-            wordCount
-        )
+        // const solution = WordsService.getRandomWordsOfLength(
+        //     wordLength,
+        //     wordCount
+        // )
+        const solution = new Array(4)
+            .fill(null)
+            .map(WordsService.getRandomWordOfLength.bind(this, 'large', 4))
         const grid = BoardService.createGridWithWords(size, solution)
         console.timeEnd('getBoard')
         console.log('SOLUTION', solution)

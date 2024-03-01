@@ -23,61 +23,54 @@ export class BoardService {
         console.time('getBoard')
         const wordLength = size[0] * size[1]
 
-        // Choose number of words base on a few parameters and chance
-        let wordCount = 0
-        while (!wordCount) {
-            let i = 1
+        // // Choose number of words base on a few parameters and chance
+        // let wordCount = 0
+        // while (!wordCount) {
+        //     let i = 1
 
-            let length = Math.round(wordLength / i)
-            while (length >= 4) {
-                // Min 4 chars per word
-                const wordsOfLength = WordsService.words.large.list.filter(
-                    (w) => w.length === length
-                ).length
-                const odds = (wordsOfLength > 500 ? 500 : wordsOfLength) / 1000
-                console.log('ODDS', { i, length, wordsOfLength, odds })
-                if (Math.random() < odds) {
-                    wordCount = i
-                    break
-                }
-                i++
-                length = Math.round(wordLength / i)
-            }
-        }
-        console.log('word count', wordCount)
+        //     let length = Math.round(wordLength / i)
+        //     while (length >= 4) {
+        //         // Min 4 chars per word
+        //         const wordsOfLength = WordsService.words.large.list.filter(
+        //             (w) => w.length === length
+        //         ).length
+        //         const odds = (wordsOfLength > 500 ? 500 : wordsOfLength) / 1000
+        //         console.log('ODDS', { i, length, wordsOfLength, odds })
+        //         if (Math.random() < odds) {
+        //             wordCount = i
+        //             break
+        //         }
+        //         i++
+        //         length = Math.round(wordLength / i)
+        //     }
+        // }
+        // console.log('word count', wordCount)
 
-        // // If it is possible to make board with just one word, decide whether to do it randomly
-        // const wordsOfFullLength = WordsService.words.large.list.filter(
-        //     (word) => word.length === wordLength
-        // ).length
-        // const single = Math.random() < wordsOfFullLength / 1000 // If we have at least 1000 words this length, always use one word
+        // console.log('WORD COUNT', wordCount)
 
-        // // Otherwise, choose number of words randomly around a midpoint
-        // const wordCountCeil = Math.ceil(wordLength / 4)
-        // const wordCountFloor = Math.floor(wordLength / 12)
-        // const wordCountRandom = randomNumberBetween(
-        //     wordCountFloor,
-        //     wordCountCeil
-        // )
-
-        // const wordCount = single ? 1 : wordCountRandom
-
-        console.log('WORD COUNT', wordCount)
-        // const solution = WordsService.getRandomWordsOfLength(
-        //     wordLength,
-        //     wordCount
-        // )
-        const solution = new Array(4)
-            .fill(null)
-            .map(
-                WordsService.getRandomWord.bind(
-                    this,
-                    WordsService.words.four.list
+        let solution
+        let grid
+        let aSolution: [string, Set<string>][]
+        do {
+            solution = new Array(4)
+                .fill(null)
+                .map(
+                    WordsService.getRandomWord.bind(
+                        this,
+                        WordsService.words.four.list
+                    )
                 )
+            grid = BoardService.createGridWithWords(size, solution)
+            console.timeEnd('getBoard')
+            console.log('SOLUTION', solution)
+
+            const possibleWords = BoardService.findWordsInGrid('large', grid)
+            aSolution = BoardService.findASolution(grid, possibleWords)
+            console.log(
+                'aSolution',
+                aSolution.map((a) => a[0])
             )
-        const grid = BoardService.createGridWithWords(size, solution)
-        console.timeEnd('getBoard')
-        console.log('SOLUTION', solution)
+        } while (aSolution.length >= 4)
 
         return {
             grid,
@@ -152,7 +145,7 @@ export class BoardService {
             )
         })
 
-        console.log('SOLUTIONS', solutions)
+        // console.log('SOLUTIONS', solutions)
 
         return solutions[0]
     }

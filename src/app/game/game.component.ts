@@ -85,7 +85,6 @@ export class GameComponent implements OnInit {
     refreshBoard() {
         this.clearBoard()
         this.valid = BoardService.applyGuesses(this.state, this.guesses)
-        console.log('STATE', this.valid)
     }
 
     clearBoard() {
@@ -103,8 +102,6 @@ export class GameComponent implements OnInit {
     }
 
     onEnter(event: any) {
-        console.log('VALID', this.valid)
-
         if (
             !this.valid ||
             !this.guesses.every((guess) =>
@@ -205,5 +202,11 @@ export class GameComponent implements OnInit {
             }
             await delay(2000)
         }
+    }
+
+    removeGuess(index: number) {
+        if (this.solved) return
+        this.guesses.splice(index, 1)
+        this.refreshBoard()
     }
 }

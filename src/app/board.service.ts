@@ -20,34 +20,6 @@ export class BoardService {
     constructor(private WordService: WordsService) {}
 
     public static getRandomBoard(size: [number, number] = [4, 4]) {
-        console.time('getBoard')
-        const wordLength = size[0] * size[1]
-
-        // // Choose number of words base on a few parameters and chance
-        // let wordCount = 0
-        // while (!wordCount) {
-        //     let i = 1
-
-        //     let length = Math.round(wordLength / i)
-        //     while (length >= 4) {
-        //         // Min 4 chars per word
-        //         const wordsOfLength = WordsService.words.large.list.filter(
-        //             (w) => w.length === length
-        //         ).length
-        //         const odds = (wordsOfLength > 500 ? 500 : wordsOfLength) / 1000
-        //         console.log('ODDS', { i, length, wordsOfLength, odds })
-        //         if (Math.random() < odds) {
-        //             wordCount = i
-        //             break
-        //         }
-        //         i++
-        //         length = Math.round(wordLength / i)
-        //     }
-        // }
-        // console.log('word count', wordCount)
-
-        // console.log('WORD COUNT', wordCount)
-
         let solution
         let grid
         let aSolution: [string, Set<string>][]
@@ -61,7 +33,6 @@ export class BoardService {
                     )
                 )
             grid = BoardService.createGridWithWords(size, solution)
-            console.timeEnd('getBoard')
             console.log('SOLUTION', solution)
 
             const possibleWords = BoardService.findWordsInGrid('large', grid)
@@ -117,8 +88,6 @@ export class BoardService {
             const covered = new Set<string>(word[1]) // Set of all filled cells
             let i = 0
             while (covered.size < cellCount) {
-                // console.log('solution', { solution, covered, i })
-
                 i++
                 if (i > cellCount) continue outer // No solution possible
                 // Sort according to most new cells covered
@@ -144,8 +113,6 @@ export class BoardService {
                 b.map((b) => b[0]).join('').length
             )
         })
-
-        // console.log('SOLUTIONS', solutions)
 
         return solutions[0]
     }
@@ -221,8 +188,6 @@ export class BoardService {
         }[][],
         guesses: string[]
     ) {
-        console.log('AAPLY GEUSSE', { board, guesses })
-
         let chars = 0
         let lastGuessPossible = false
         for (let i = 0; i < guesses.length; i++) {
@@ -275,15 +240,6 @@ export class BoardService {
         if (!guess) return true
         const cell = board[y]?.[x]
         if (!cell || cell.char !== guess[0]) return false
-        console.log('apply guess', {
-            board,
-            state,
-            guess,
-            x,
-            y,
-            guessCount,
-            step,
-        })
 
         const makesWord = BoardService.getNeighbors(board, x, y)
             .map(([nx, ny]) =>
@@ -301,7 +257,6 @@ export class BoardService {
         if (makesWord) {
             cell.state = state
             cell.step[step] = (cell.step[step] || 0) + 1
-            console.log('CELL', cell, guess)
         }
         return makesWord
     }
@@ -309,7 +264,6 @@ export class BoardService {
     public static doesWordCoverGrid(grid: string[][], word: string) {
         const gridSize = grid.length * grid[0].length
         const words = BoardService.findWordsInGrid('custom', grid, [word])
-        // console.log('COVERS?', gridSize, words[word]?.size)
 
         return words[word]?.size === gridSize
     }
@@ -318,8 +272,6 @@ export class BoardService {
         size: [number, number],
         letters: string
     ) {
-        // console.log('createGridWithSolution', size, letters)
-
         const grid = this.getEmptyGrid(size)
 
         const x = Math.floor(Math.random() * size[0])
@@ -461,15 +413,12 @@ export class BoardService {
         x: number,
         y: number
     ) {
-        // console.log('placeSolutionOnGrid', { grid, placed, letters, x, y })
-
         const key = `${x},${y}`
         if (placed.has(key)) return
         if (grid[y]?.[x] === undefined) return false
 
         grid[y][x] = letters[0]
         placed.add(key)
-        // console.log('WHAT"', placed.size, grid[0].length * grid.length)
 
         if (placed.size === grid[0].length * grid.length) return true
 

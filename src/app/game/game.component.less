@@ -45,10 +45,26 @@
     height: 1.5em;
     background-color: lightgray;
     text-align: center;
+    position: relative;
 }
 
 .guess.active {
     background: white;
+}
+
+.guess .remove {
+    background: transparent;
+    border: 0;
+    font-family: sans-serif;
+    line-height: 100%;
+    height: 100%;
+    vertical-align: middle;
+    position: absolute;
+    right: 0;
+    width: 2rem;
+    font-size: 1.3rem;
+    top: 0;
+    cursor: pointer;
 }
 
 .guesses .wrongAnswer {

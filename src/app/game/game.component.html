@@ -1,17 +1,4 @@
 <div *ngIf="isInit" class="board">
-    <div class="flex">
-        <select [(ngModel)]="size[0]">
-            <option *ngFor="let s of sizes" [ngValue]="s">{{ s }}</option>
-        </select>
-        <select [(ngModel)]="size[1]">
-            <option *ngFor="let s of sizes" [ngValue]="s">{{ s }}</option>
-        </select>
-    </div>
-    <p class="hint">
-        {{ solution.length }} word{{ solution.length === 1 ? '' : 's' }} =
-        cookie
-    </p>
-
     <div>
         <div *ngFor="let row of state; let y = index" class="row">
             <div
@@ -42,7 +29,7 @@
         </span>
     </div>
     <div class="guesses flex column reverse">
-        <span
+        <div
             *ngFor="
                 let guess of guesses | slice: 0 : -1;
                 let i = index;
@@ -51,8 +38,12 @@
             [attr.data-state]="i"
             [style.backgroundColor]="colors[i]"
             class="guess"
-            >{{ guess }}</span
         >
+            <span>{{ guess }}</span>
+            <button *ngIf="!solved" class="remove" (click)="removeGuess(i)">
+                X
+            </button>
+        </div>
         <input
             #wordInput
             class="guess"

@@ -15,6 +15,13 @@
             </div>
         </div>
     </div>
+    <div *ngIf="solved" class="copy" title="'Click To Copy'" (click)="copy()">
+        <div *ngFor="let row of state; let y = index" class="row">
+            <div *ngFor="let cell of row; let x = index">
+                {{ emoji[cell.state - 1] }}
+            </div>
+        </div>
+    </div>
     <div *ngIf="!solved" class="inputButtons">
         <button (click)="onDelete()" class="delete">
             <svg

@@ -39,6 +39,34 @@ export class GameComponent implements OnInit {
     guesses: string[] = ['']
     solved: boolean = false
     colors: string[] = []
+    emoji = [
+        '🟩',
+        '🟨',
+        '🟧',
+        '🟥',
+        '🟫',
+        '🟪',
+        '🟦',
+        '⬜',
+        '⬛',
+        '💚',
+        '💛',
+        '🧡',
+        '🤎',
+        '💜',
+        '💙',
+        '🤍',
+        '🖤',
+        '🟢',
+        '🟡',
+        '🟠',
+        '🔴',
+        '🟤',
+        '🟣',
+        '🔵',
+        '⚪',
+        '⚫',
+    ]
     valid: boolean = false
     isLoading: boolean = false
 
@@ -225,5 +253,14 @@ export class GameComponent implements OnInit {
             this.guesses.pop()
         } else this.guesses[this.guesses.length - 1] = guess.slice(0, -1)
         this.refreshBoard()
+    }
+
+    copy() {
+        const text = this.state
+            .map((row) =>
+                row.map((cell) => this.emoji[cell.state - 1]).join('')
+            )
+            .join('\n')
+        navigator.clipboard.writeText(text)
     }
 }

@@ -9,6 +9,7 @@
                 [attr.data-y]="y"
                 [attr.data-state]="cell.state"
                 [style.backgroundColor]="colors[cell.state - 1]"
+                (click)="onCellClick(cell)"
             >
                 {{ cell.char }}
             </div>
@@ -44,18 +45,23 @@
                 X
             </button>
         </div>
-        <input
-            #wordInput
-            class="guess"
-            [class.active]="!solved"
-            [disabled]="solved"
-            [(ngModel)]="guesses[guesses.length - 1]"
-            (ngModelChange)="onInput($event)"
-            (keydown.enter)="onEnter($event)"
-            (keydown.backspace)="onBackspace($event)"
-            [style.backgroundColor]="
-                solved ? colors[guesses.length - 1] : '#FFF'
-            "
-        />
+        <div class="inputRow">
+            <input
+                #wordInput
+                class="guess"
+                [class.active]="!solved"
+                [disabled]="solved"
+                [(ngModel)]="guesses[guesses.length - 1]"
+                (ngModelChange)="onInput($event)"
+                (keydown.enter)="onEnter($event)"
+                (keydown.backspace)="onBackspace($event)"
+                [style.backgroundColor]="
+                    solved ? colors[guesses.length - 1] : '#FFF'
+                "
+            />
+
+            <button (click)="onDelete()">BACK</button>
+            <button (click)="onEnter($event)">ENTER</button>
+        </div>
     </div>
 </div>

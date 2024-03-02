@@ -209,4 +209,17 @@ export class GameComponent implements OnInit {
         this.guesses.splice(index, 1)
         this.refreshBoard()
     }
+
+    onCellClick(cell: any) {
+        this.guesses[this.guesses.length - 1] += cell.char
+        this.onInput(this.guesses[this.guesses.length - 1])
+    }
+
+    onDelete() {
+        const guess = this.guesses[this.guesses.length - 1]
+        if (this.guesses.length > 1 && guess === '') {
+            this.guesses.pop()
+        } else this.guesses[this.guesses.length - 1] = guess.slice(0, -1)
+        this.refreshBoard()
+    }
 }

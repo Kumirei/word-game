@@ -56,17 +56,14 @@
     </div>
 
     <div *ngIf="solved" class="solution">
-        <span>
-            <span *ngFor="let word of solution; last as last">
-                <a
-                    href="https://www.merriam-webster.com/dictionary/{{ word }}"
-                    target="_blank"
-                    class="dictionaryLink"
-                >
-                    {{ word | uppercase }}
-                </a>
-                {{ last ? '' : ',' }}
-            </span>
+        <span *ngFor="let word of solution; last as last">
+            <a
+                href="https://www.merriam-webster.com/dictionary/{{ word }}"
+                target="_blank"
+                class="dictionaryLink"
+            >
+                {{ word | uppercase }}
+            </a>
         </span>
     </div>
     <div *ngIf="!solved" class="inputRow">

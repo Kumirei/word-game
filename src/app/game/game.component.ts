@@ -40,6 +40,7 @@ export class GameComponent implements OnInit {
     solved: boolean = false
     colors: string[] = []
     valid: boolean = false
+    isLoading: boolean = false
 
     constructor(
         private changeDetector: ChangeDetectorRef,
@@ -54,6 +55,8 @@ export class GameComponent implements OnInit {
     }
 
     newBoard() {
+        if (this.isLoading) return
+        this.isLoading = true
         const { grid, solution } = BoardService.getRandomBoard(this.size)
 
         this.board = grid
@@ -70,6 +73,7 @@ export class GameComponent implements OnInit {
         this.isInit = true
         this.updateColors()
         this.solved = false
+        this.isLoading = false
         this.changeDetector.detectChanges()
     }
 
@@ -161,7 +165,7 @@ export class GameComponent implements OnInit {
     }
 
     updateColors() {
-        const green = d3.rgb(136, 255, 141)
+        const green = d3.rgb(170, 255, 173)
         const red = d3.rgb(255, 136, 136)
         this.colors = new Array(this.guesses.length).fill(null).map((_, i) => {
             return d3.interpolate(green, red)(i / this.guesses.length)

@@ -46,6 +46,11 @@
     background-color: lightgray;
     text-align: center;
     position: relative;
+    color: black;
+}
+
+.guess button {
+    color: black;
 }
 
 .guess.active {
@@ -76,7 +81,11 @@
 }
 
 .solution {
-    font-size: 2em;
+    font-size: 1.5em;
+}
+
+.solution a {
+    color: white;
 }
 
 input:disabled {
@@ -146,15 +155,40 @@ input:disabled {
     }
 }
 
+.inputButtons {
+    display: flex;
+    width: 6em;
+}
+
 .inputRow {
     display: flex;
     align-items: stretch;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.5rem;
 }
 
-.inputRow button {
+.inputRow .guess {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: min(500px, 75vw);
+    max-width: 100%;
+}
+
+.inputButtons button {
     background-color: transparent;
     border: none;
     cursor: pointer;
+    color: white;
+    fill: white;
+    font-size: 2em;
+    height: 1.5em;
+    width: 1.5em;
+}
+
+.inputRow button:hover svg,
+.guess .remove:hover svg {
+    scale: 1.2;
 }
 
 .cell:not([data-state='0']) {
@@ -163,4 +197,9 @@ input:disabled {
 
 .cell {
     cursor: pointer;
+}
+
+.dictionaryLink {
+    color: black;
+    text-decoration: none;
 }

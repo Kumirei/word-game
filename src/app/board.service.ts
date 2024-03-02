@@ -83,7 +83,9 @@ export class BoardService {
         // Try all words as first word
         // Thereafter just try the best one until grid is filled
         let solutions = []
-        outer: for (let word of wordList) {
+        console.log('WORDS', wordList)
+
+        outer: for (let word of wordList.slice(0, 1)) {
             const solution: [string, Set<string>][] = [word]
             const covered = new Set<string>(word[1]) // Set of all filled cells
             let i = 0

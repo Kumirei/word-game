@@ -40,32 +40,18 @@ export class GameComponent implements OnInit {
     solved: boolean = false
     colors: string[] = []
     emoji = [
-        '🟩',
-        '🟨',
-        '🟧',
-        '🟥',
-        '🟫',
+        '⬛',
         '🟪',
         '🟦',
         '⬜',
-        '⬛',
-        '💚',
-        '💛',
-        '🧡',
-        '🤎',
-        '💜',
-        '💙',
-        '🤍',
-        '🖤',
-        '🟢',
-        '🟡',
-        '🟠',
-        '🔴',
-        '🟤',
+        '⚫',
         '🟣',
         '🔵',
         '⚪',
-        '⚫',
+        '🖤',
+        '💜',
+        '💙',
+        '🤍',
     ]
     valid: boolean = false
     isLoading: boolean = false
@@ -193,15 +179,19 @@ export class GameComponent implements OnInit {
     }
 
     updateColors() {
-        const green = d3.rgb(170, 255, 173)
-        const red = d3.rgb(255, 136, 136)
+        const green = d3.hsl(288, 1.0, 0.72)
+        // const green = d3.rgb(203, 104, 228)
+        // const red = d3.rgb(130, 205, 234)
+        const red = d3.hsl(540, 1.0, 0.8)
         this.colors = new Array(this.guesses.length).fill(null).map((_, i) => {
-            return d3.interpolate(green, red)(i / this.guesses.length)
+            const weight =
+                this.guesses.length === 1 ? 0 : i / (this.guesses.length - 1)
+            return d3.interpolate(green, red)(weight)
         })
     }
 
     focusInput() {
-        this.wordInput.nativeElement.focus()
+        this.wordInput?.nativeElement?.focus()
     }
 
     onBackspace(event: Event) {

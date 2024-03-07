@@ -3,6 +3,7 @@ import {
     AfterViewInit,
     Component,
     ElementRef,
+    HostBinding,
     Input,
     OnChanges,
     OnInit,
@@ -20,9 +21,20 @@ import {
     `,
     styles: [
         `
+            :host {
+                width: 100lvw;
+                height: 100lvh;
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                overflow: hidden;
+            }
+
             .twinkle {
                 opacity: 0;
-                transition: opacity 1s ease-in-out;
+                transition: opacity calc(var(--twinkle-on-duration) / 2 * 1ms)
+                    ease-in-out;
                 width: 1px;
                 height: 1px;
                 background-color: white;
@@ -38,7 +50,7 @@ import {
 })
 export class Twinkles implements OnInit, AfterViewInit {
     @Input() count: number = 10
-    @Input() onTime: number = 1000 // MS
+    @Input() @HostBinding('style.--twinkle-on-duration') onTime: number = 1000 // MS
     @Input() offTime: number = 1000 // MS
 
     @ViewChildren('twinkle') twinkleElems!: QueryList<ElementRef>
@@ -67,7 +79,7 @@ export class Twinkles implements OnInit, AfterViewInit {
             elem.nativeElement.classList.remove('on')
             setTimeout(
                 () => this.twinkle(elem),
-                this.offTime + (this.offTime / 2) * Math.random()
+                this.offTime * (Math.random() + 0.5)
             )
         } else {
             elem.nativeElement.classList.add('on')

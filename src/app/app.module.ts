@@ -5,10 +5,11 @@ import { AppComponent } from './app.component'
 import { GameComponent } from './game/game.component'
 import { HttpClientModule } from '@angular/common/http'
 import { FormsModule } from '@angular/forms'
+import { Twinkles } from './twinkles.component'
 
 @NgModule({
     declarations: [AppComponent, GameComponent],
-    imports: [BrowserModule, HttpClientModule, FormsModule],
+    imports: [BrowserModule, HttpClientModule, FormsModule, Twinkles],
     providers: [],
     bootstrap: [AppComponent],
 })

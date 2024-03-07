@@ -2,6 +2,17 @@
     <h1>Seqle</h1>
     <div class="newGame">
         <button (click)="newGame()">New Game</button>
+        <button popovertarget="helpDialog">Help</button>
     </div>
 </header>
 <app-game></app-game>
+<twinkles [count]="10" [onTime]="1000" [offTime]="1000"></twinkles>
+<dialog #help id="helpDialog" popover>
+    <h2>How to play</h2>
+    <p>Try to fill the board in four words</p>
+    <ul>
+        <li>Your words may be of any length</li>
+        <li>The letters will change colors when used</li>
+        <li>Once you have used all letters, you win!</li>
+    </ul>
+</dialog>

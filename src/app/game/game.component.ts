@@ -13,12 +13,13 @@ import { BoardService } from '../board.service'
 import { WordsService } from '../words.service'
 import * as d3 from 'd3'
 import { delay } from '../util'
+import { StatsService } from '../stats.service'
 
 @Component({
     selector: 'app-game',
     templateUrl: './game.component.html',
     styleUrls: ['./game.component.less'],
-    providers: [BoardService, WordsService],
+    providers: [BoardService, WordsService, StatsService],
 })
 export class GameComponent implements OnInit {
     @ViewChild('wordInput') wordInput!: ElementRef
@@ -40,18 +41,18 @@ export class GameComponent implements OnInit {
     solved: boolean = false
     colors: string[] = []
     emoji = [
-        '⬛',
         '🟪',
         '🟦',
         '⬜',
-        '⚫',
+        '⬛',
         '🟣',
         '🔵',
         '⚪',
-        '🖤',
+        '⚫',
         '💜',
         '💙',
         '🤍',
+        '🖤',
     ]
     valid: boolean = false
     isLoading: boolean = false
@@ -59,7 +60,8 @@ export class GameComponent implements OnInit {
     constructor(
         private changeDetector: ChangeDetectorRef,
         private BoardService: BoardService,
-        private WordService: WordsService
+        private WordService: WordsService,
+        private StatsService: StatsService
     ) {}
 
     async ngOnInit(): Promise<void> {
@@ -210,6 +212,7 @@ export class GameComponent implements OnInit {
         this.solved = true
         this.changeDetector.detectChanges()
         // alert('sovled!')
+        StatsService.win(this.guesses.length)
         this.keepBumping()
     }
 

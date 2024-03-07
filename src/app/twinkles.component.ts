@@ -6,6 +6,7 @@ import {
     HostBinding,
     Input,
     OnChanges,
+    OnDestroy,
     OnInit,
     QueryList,
     SimpleChanges,
@@ -33,8 +34,8 @@ import {
 
             .twinkle {
                 opacity: 0;
-                transition: opacity calc(var(--twinkle-on-duration) / 2 * 1ms)
-                    ease-in-out;
+                transition: opacity
+                    calc(var(--twinkle-transition-duration) * 1ms) ease-in-out;
                 width: 1px;
                 height: 1px;
                 background-color: white;
@@ -48,44 +49,69 @@ import {
         `,
     ],
 })
-export class Twinkles implements OnInit, AfterViewInit {
+export class Twinkles implements OnChanges, AfterViewInit, OnDestroy {
     @Input() count: number = 10
-    @Input() @HostBinding('style.--twinkle-on-duration') onTime: number = 1000 // MS
+    @Input() onTime: number = 1000 // MS
+    @Input()
+    @HostBinding('style.--twinkle-transition-duration')
+    transitionTime: number = 500 // MS
     @Input() offTime: number = 1000 // MS
 
     @ViewChildren('twinkle') twinkleElems!: QueryList<ElementRef>
 
-    twinkles: any[] = []
+    twinkles: Twinkle[] = []
 
-    ngOnInit(): void {
-        this.twinkles = new Array(this.count).fill(null).map((_) => ({
-            offset: Math.random() * this.offTime,
-        }))
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['count']) this.createTwinkles()
     }
 
     ngAfterViewInit(): void {
-        console.log('AAAA', this.twinkleElems.first)
+        this.startTwinkling()
+    }
 
-        for (let elem of this.twinkleElems) {
-            setTimeout(() => {
-                this.twinkle(elem)
-            }, Math.random() * this.offTime)
+    ngOnDestroy(): void {
+        this.stopTwinkling()
+    }
+
+    createTwinkles() {
+        this.stopTwinkling()
+        this.twinkles = new Array(this.count).fill(null).map((_, i) => ({ i }))
+    }
+
+    startTwinkling() {
+        for (let twinkle of this.twinkles) {
+            twinkle.timeout = setTimeout(
+                () => this.twinkleOn(twinkle),
+                Math.random() * this.offTime // Randomize time before first twinkle
+            ) as unknown as number
         }
     }
 
-    twinkle(elem: ElementRef) {
-        // Toggle on/off
-        if (elem.nativeElement.classList.contains('on')) {
-            elem.nativeElement.classList.remove('on')
-            setTimeout(
-                () => this.twinkle(elem),
-                this.offTime * (Math.random() + 0.5)
-            )
-        } else {
+    stopTwinkling() {
+        for (let twinkle of this.twinkles) clearTimeout(twinkle.timeout)
+    }
+
+    twinkleOn(twinkle: Twinkle) {
+        const elem = this.twinkleElems.get(twinkle.i)
+        if (elem) {
             elem.nativeElement.classList.add('on')
             elem.nativeElement.style.left = Math.random() * 100 + '%'
             elem.nativeElement.style.top = Math.random() * 100 + '%'
-            setTimeout(() => this.twinkle(elem), this.onTime)
         }
+        twinkle.timeout = setTimeout(
+            () => this.twinkleOff(twinkle),
+            this.transitionTime + this.onTime
+        ) as unknown as number
+    }
+
+    twinkleOff(twinkle: Twinkle) {
+        const elem = this.twinkleElems.get(twinkle.i)
+        elem?.nativeElement.classList.remove('on')
+        twinkle.timeout = setTimeout(
+            () => this.twinkleOn(twinkle),
+            this.offTime * (Math.random() + 0.5) // Randomize time off delay a bit
+        ) as unknown as number
     }
 }
+
+type Twinkle = { timeout?: number; i: number }

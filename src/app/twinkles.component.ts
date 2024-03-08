@@ -1,6 +1,7 @@
 import { NgFor } from '@angular/common'
 import {
     AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     HostBinding,
@@ -30,6 +31,7 @@ import {
                 top: 0;
                 left: 0;
                 overflow: hidden;
+                pointer-events: none;
             }
 
             .twinkle {
@@ -49,8 +51,8 @@ import {
         `,
     ],
 })
-export class Twinkles implements OnChanges, AfterViewInit, OnDestroy {
-    @Input() count: number = 10
+export class Twinkles implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+    @Input() density: number = 1 / 10_000 // Twinkles per pixel
     @Input() onTime: number = 1000 // MS
     @Input()
     @HostBinding('style.--twinkle-transition-duration')
@@ -60,6 +62,21 @@ export class Twinkles implements OnChanges, AfterViewInit, OnDestroy {
     @ViewChildren('twinkle') twinkleElems!: QueryList<ElementRef>
 
     twinkles: Twinkle[] = []
+    resizeObserver!: ResizeObserver
+
+    constructor(
+        private elementRef: ElementRef,
+        private changeDetector: ChangeDetectorRef
+    ) {}
+
+    ngOnInit(): void {
+        this.resizeObserver = new ResizeObserver((entries) => {
+            this.createTwinkles()
+            this.startTwinkling()
+        })
+
+        this.resizeObserver.observe(this.elementRef.nativeElement)
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['count']) this.createTwinkles()
@@ -71,11 +88,18 @@ export class Twinkles implements OnChanges, AfterViewInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.stopTwinkling()
+        this.resizeObserver.unobserve(this.elementRef.nativeElement)
     }
 
     createTwinkles() {
         this.stopTwinkling()
-        this.twinkles = new Array(this.count).fill(null).map((_, i) => ({ i }))
+        const pixels =
+            this.elementRef.nativeElement.offsetHeight *
+            this.elementRef.nativeElement.offsetWidth
+        const count = Math.floor(pixels * this.density)
+
+        this.twinkles = new Array(count).fill(null).map((_, i) => ({ i }))
+        this.changeDetector.detectChanges()
     }
 
     startTwinkling() {

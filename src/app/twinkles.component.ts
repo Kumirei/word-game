@@ -24,12 +24,6 @@ import {
     styles: [
         `
             :host {
-                width: 100lvw;
-                height: 100lvh;
-                display: block;
-                position: absolute;
-                top: 0;
-                left: 0;
                 overflow: hidden;
                 pointer-events: none;
             }

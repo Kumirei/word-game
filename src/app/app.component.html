@@ -3,6 +3,22 @@
     <h1>Seqle</h1>
     <div class="newGame">
         <button (click)="newGame()">New Game</button>
+        <button popovertarget="statsDialog">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+            >
+                <rect x="0" fill="none" width="24" height="24" />
+
+                <g>
+                    <path
+                        d="M21 21H3v-2h18v2zM8 10H4v7h4v-7zm6-4h-4v11h4V6zm6-3h-4v14h4V3z"
+                    />
+                </g>
+            </svg>
+        </button>
         <button popovertarget="helpDialog">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -21,6 +37,7 @@
     </div>
 </header>
 <app-game></app-game>
+<dialog #help id="statsDialog" popover>Stats</dialog>
 <dialog #help id="helpDialog" popover>
     <h2>How to play</h2>
     <p><em class="bold">Goal:</em> Fill the board by placing down word</p>

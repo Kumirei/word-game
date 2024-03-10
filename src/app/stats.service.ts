@@ -8,6 +8,7 @@ export class StatsService {
     private static DefaultStats: Stats = {
         finished: 0,
         wordCount: {},
+        letterCount: {},
     }
 
     public static saveStats(stats: Stats) {
@@ -22,10 +23,14 @@ export class StatsService {
         return (stats && JSON.parse(stats)) || StatsService.DefaultStats
     }
 
-    public static win(wordCount: number) {
+    public static win(guesses: string[]) {
+        const wordCount = guesses.length
+        const letterCount = new Set(guesses.join('').split('')).size
         const stats = this.getStats()
         stats.finished++
         stats.wordCount[wordCount] = (stats.wordCount[wordCount] || 0) + 1
+        stats.letterCount[letterCount] =
+            (stats.letterCount[letterCount] || 0) + 1
         this.saveStats(stats)
         console.log('stats', stats)
     }
@@ -34,4 +39,5 @@ export class StatsService {
 export type Stats = {
     finished: number
     wordCount: Record<number, number>
+    letterCount: Record<number, number>
 }

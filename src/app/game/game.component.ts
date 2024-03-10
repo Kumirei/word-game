@@ -212,7 +212,7 @@ export class GameComponent implements OnInit {
         this.solved = true
         this.changeDetector.detectChanges()
         // alert('sovled!')
-        StatsService.win(this.guesses.length)
+        StatsService.win(this.guesses)
         this.keepBumping()
     }
 

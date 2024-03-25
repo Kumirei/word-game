@@ -9,6 +9,7 @@ export class StatsService {
         finished: 0,
         wordCount: {},
         letterCount: {},
+        wordLengthCount: {},
     }
 
     public static saveStats(stats: Stats) {
@@ -20,17 +21,27 @@ export class StatsService {
 
     public static getStats(): Stats {
         const stats = localStorage.getItem(StatsService.LocalStorageKey)
-        return (stats && JSON.parse(stats)) || StatsService.DefaultStats
+        if (stats) {
+            return Object.assign(StatsService.DefaultStats, JSON.parse(stats))
+        } else {
+            return StatsService.DefaultStats
+        }
     }
 
     public static win(guesses: string[]) {
         const wordCount = guesses.length
         const letterCount = new Set(guesses.join('').split('')).size
+
         const stats = this.getStats()
         stats.finished++
         stats.wordCount[wordCount] = (stats.wordCount[wordCount] || 0) + 1
         stats.letterCount[letterCount] =
             (stats.letterCount[letterCount] || 0) + 1
+        for (let word of guesses) {
+            const wordLength = word.length
+            stats.wordLengthCount[wordLength] =
+                (stats.wordLengthCount[wordLength] || 0) + 1
+        }
         this.saveStats(stats)
         console.log('stats', stats)
     }
@@ -40,4 +51,5 @@ export type Stats = {
     finished: number
     wordCount: Record<number, number>
     letterCount: Record<number, number>
+    wordLengthCount: Record<number, number>
 }

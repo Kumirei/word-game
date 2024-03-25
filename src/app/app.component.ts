@@ -9,6 +9,7 @@ import { GameComponent } from './game/game.component'
 export class AppComponent {
     @ViewChild(GameComponent) GameComponent!: GameComponent
     title = 'word-game'
+    statsOpen = false
 
     newGame() {
         this.GameComponent.newBoard()

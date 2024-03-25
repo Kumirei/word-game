@@ -37,7 +37,14 @@
     </div>
 </header>
 <app-game></app-game>
-<dialog #help id="statsDialog" popover>Stats</dialog>
+<dialog
+    #statsModal
+    id="statsDialog"
+    popover
+    (beforetoggle)="statsOpen = !statsOpen"
+>
+    <stats *ngIf="statsOpen"></stats>
+</dialog>
 <dialog #help id="helpDialog" popover>
     <h2>How to play</h2>
     <p><em class="bold">Goal:</em> Fill the board by placing down word</p>

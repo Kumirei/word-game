@@ -10,13 +10,14 @@ import { StatsComponent } from './game/stats.component'
 import { ChartComponent } from './chart.component'
 
 @NgModule({
-    declarations: [AppComponent, GameComponent, StatsComponent],
+    declarations: [AppComponent],
     imports: [
         BrowserModule,
         HttpClientModule,
         FormsModule,
         Twinkles,
         ChartComponent,
+        GameComponent, StatsComponent,
     ],
     providers: [],
     bootstrap: [AppComponent],

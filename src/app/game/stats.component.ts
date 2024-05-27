@@ -48,6 +48,8 @@ import { ChartComponent } from '../chart.component'
             }
         `,
     ],
+    standalone: true,
+    imports: [ChartComponent],
 })
 export class StatsComponent implements OnInit {
     finished: number = 0

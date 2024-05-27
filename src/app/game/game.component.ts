@@ -14,12 +14,22 @@ import { WordsService } from '../words.service'
 import * as d3 from 'd3'
 import { delay } from '../util'
 import { StatsService } from '../stats.service'
+import { FormsModule } from '@angular/forms';
+import { NgIf, NgFor, UpperCasePipe, SlicePipe } from '@angular/common';
 
 @Component({
     selector: 'app-game',
     templateUrl: './game.component.html',
     styleUrls: ['./game.component.less'],
     providers: [BoardService, WordsService, StatsService],
+    standalone: true,
+    imports: [
+        NgIf,
+        NgFor,
+        FormsModule,
+        UpperCasePipe,
+        SlicePipe,
+    ],
 })
 export class GameComponent implements OnInit {
     @ViewChild('wordInput') wordInput!: ElementRef

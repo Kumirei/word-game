@@ -23,7 +23,6 @@
     "d3": "^7.9.0",
     "d3-color": "^3.1.0",
     "d3-interpolate": "^3.0.1",
-    "prettier": "^3.1.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.4"
@@ -40,6 +39,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
     "typescript": "~5.4.5"
   }

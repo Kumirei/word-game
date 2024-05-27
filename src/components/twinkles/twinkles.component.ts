@@ -1,4 +1,4 @@
-import { NgFor } from '@angular/common'
+
 import {
     AfterViewInit,
     ChangeDetectorRef,
@@ -17,10 +17,12 @@ import {
 @Component({
     selector: 'twinkles',
     standalone: true,
-    imports: [NgFor],
+    imports: [],
     template: `
-        <div #twinkle *ngFor="let _ of twinkles" class="twinkle"></div>
-    `,
+        @for (_ of twinkles; track _) {
+          <div #twinkle class="twinkle"></div>
+        }
+        `,
     styles: [
         `
             :host {

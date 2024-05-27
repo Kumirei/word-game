@@ -7,10 +7,17 @@ import { HttpClientModule } from '@angular/common/http'
 import { FormsModule } from '@angular/forms'
 import { Twinkles } from './twinkles.component'
 import { StatsComponent } from './game/stats.component'
+import { ChartComponent } from './chart.component'
 
 @NgModule({
     declarations: [AppComponent, GameComponent, StatsComponent],
-    imports: [BrowserModule, HttpClientModule, FormsModule, Twinkles],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        FormsModule,
+        Twinkles,
+        ChartComponent,
+    ],
     providers: [],
     bootstrap: [AppComponent],
 })

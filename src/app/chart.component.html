@@ -1,0 +1,21 @@
+<div class="flexWrapper">
+    <div class="data">
+        @for (item of data; track $index) {
+            <div
+                class="bar"
+                [style.--height.%]="(item.value / max) * 100"
+                [style.--background]="colors[$index]"
+            >
+                @if (item.value) {
+                    <label>{{ item.value }}</label>
+                }
+                <div class="fill"></div>
+            </div>
+        }
+    </div>
+</div>
+<div class="x-legend">
+    @for (item of data; track $index) {
+        <div>{{ item.label }}</div>
+    }
+</div>

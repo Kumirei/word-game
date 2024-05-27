@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-import { StatsService } from '../stats.service'
-import { ChartComponent } from '../chart.component'
+import { StatsService } from '../../services/stats/stats.service'
+import { ChartComponent } from '../chart/chart.component'
 
 @Component({
     selector: 'stats',

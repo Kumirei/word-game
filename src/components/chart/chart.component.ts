@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core'
-import { RoundPipe } from './round.pipe'
+import { RoundPipe } from '../../pipes/round.pipe'
 import * as d3 from 'd3'
 
 @Component({

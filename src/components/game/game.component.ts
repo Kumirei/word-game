@@ -9,13 +9,13 @@ import {
     ViewChild,
     ViewChildren,
 } from '@angular/core'
-import { BoardService } from '../board.service'
-import { WordsService } from '../words.service'
+import { BoardService } from '../../services/board/board.service'
+import { WordsService } from '../../services/words/words.service'
 import * as d3 from 'd3'
-import { delay } from '../util'
-import { StatsService } from '../stats.service'
-import { FormsModule } from '@angular/forms';
-import { NgIf, NgFor, UpperCasePipe, SlicePipe } from '@angular/common';
+import { delay } from '../../utils/util'
+import { StatsService } from '../../services/stats/stats.service'
+import { FormsModule } from '@angular/forms'
+import { NgIf, NgFor, UpperCasePipe, SlicePipe } from '@angular/common'
 
 @Component({
     selector: 'app-game',
@@ -23,13 +23,7 @@ import { NgIf, NgFor, UpperCasePipe, SlicePipe } from '@angular/common';
     styleUrls: ['./game.component.less'],
     providers: [BoardService, WordsService, StatsService],
     standalone: true,
-    imports: [
-        NgIf,
-        NgFor,
-        FormsModule,
-        UpperCasePipe,
-        SlicePipe,
-    ],
+    imports: [NgIf, NgFor, FormsModule, UpperCasePipe, SlicePipe],
 })
 export class GameComponent implements OnInit {
     @ViewChild('wordInput') wordInput!: ElementRef

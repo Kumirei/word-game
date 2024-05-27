@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 
 import { AppComponent } from './app.component'
-import { GameComponent } from './game/game.component'
+import { GameComponent } from '../components/game/game.component'
 import { HttpClientModule } from '@angular/common/http'
 import { FormsModule } from '@angular/forms'
-import { Twinkles } from './twinkles.component'
-import { StatsComponent } from './game/stats.component'
-import { ChartComponent } from './chart.component'
+import { Twinkles } from '../components/twinkles/twinkles.component'
+import { StatsComponent } from '../components/stats/stats.component'
+import { ChartComponent } from '../components/chart/chart.component'
 
 @NgModule({
     declarations: [AppComponent],
@@ -17,7 +17,8 @@ import { ChartComponent } from './chart.component'
         FormsModule,
         Twinkles,
         ChartComponent,
-        GameComponent, StatsComponent,
+        GameComponent,
+        StatsComponent,
     ],
     providers: [],
     bootstrap: [AppComponent],

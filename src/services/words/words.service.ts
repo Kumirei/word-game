@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { firstValueFrom } from 'rxjs'
-import { arrayRandom } from './util'
+import { arrayRandom } from '../../utils/util'
 
 export type DictionaryEntry = { isWord?: boolean } & {
     [key: string]: DictionaryEntry

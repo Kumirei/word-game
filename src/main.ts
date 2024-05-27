@@ -1,4 +1,4 @@
-import { WordsService } from './app/words.service'
+import { WordsService } from './services/words/words.service'
 import { enableProdMode } from '@angular/core'
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
 

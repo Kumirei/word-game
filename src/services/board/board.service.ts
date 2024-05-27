@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
-import { DictionaryEntry, WordsService } from './words.service'
-import { group, randomNumberBetween, shuffle } from './util'
+import { DictionaryEntry, WordsService } from '../words/words.service'
+import { group, randomNumberBetween, shuffle } from '../../utils/util'
 import * as d3 from 'd3'
 
 @Injectable({

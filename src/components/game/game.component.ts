@@ -15,7 +15,8 @@ import * as d3 from 'd3'
 import { delay } from '../../utils/util'
 import { StatsService } from '../../services/stats/stats.service'
 import { FormsModule } from '@angular/forms'
-import { UpperCasePipe, SlicePipe } from '@angular/common';
+import { UpperCasePipe, SlicePipe } from '@angular/common'
+import { IconComponent } from '../icon/icon.component'
 
 @Component({
     selector: 'app-game',
@@ -23,7 +24,7 @@ import { UpperCasePipe, SlicePipe } from '@angular/common';
     styleUrls: ['./game.component.less'],
     providers: [BoardService, WordsService, StatsService],
     standalone: true,
-    imports: [FormsModule, UpperCasePipe, SlicePipe],
+    imports: [FormsModule, UpperCasePipe, SlicePipe, IconComponent],
 })
 export class GameComponent implements OnInit {
     @ViewChild('wordInput') wordInput!: ElementRef

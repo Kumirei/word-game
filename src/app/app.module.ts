@@ -8,12 +8,20 @@ import { FormsModule } from '@angular/forms'
 import { Twinkles } from '../components/twinkles/twinkles.component'
 import { StatsComponent } from '../components/stats/stats.component'
 import { ChartComponent } from '../components/chart/chart.component'
+import { IconComponent } from '../components/icon/icon.component'
 
-@NgModule({ declarations: [AppComponent],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+@NgModule({
+    declarations: [AppComponent],
+    bootstrap: [AppComponent],
+    providers: [provideHttpClient(withInterceptorsFromDi())],
+    imports: [
+        BrowserModule,
         FormsModule,
         Twinkles,
         ChartComponent,
         GameComponent,
-        StatsComponent], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        StatsComponent,
+        IconComponent,
+    ],
+})
 export class AppModule {}

@@ -9,15 +9,15 @@ import { ChartComponent } from '../chart/chart.component'
         <div class="finished">Games: {{ finished }}</div>
         <div class="stat">
             <label>Words Used</label>
-            <sixten-chart [data]="wordCount"></sixten-chart>
+            <sixten-chart [data]="wordCount" />
         </div>
         <div class="stat">
             <label>Word Lengths</label>
-            <sixten-chart [data]="wordLengthCount"></sixten-chart>
+            <sixten-chart [data]="wordLengthCount" />
         </div>
         <div class="stat">
             <label>Total Letters Used</label>
-            <sixten-chart [data]="letterCount"></sixten-chart>
+            <sixten-chart [data]="letterCount" />
         </div>
     `,
     styles: [

@@ -43,9 +43,12 @@ import { HelpComponent } from '../help/help.component'
     styles: `
         header {
             text-align: center;
-            background-color: #ffc3f6;
             padding: 0.5rem;
             position: relative;
+            background-color: transparent;
+            box-shadow: 1px 0 0 0 #e0fffd;
+            color: #fff;
+            text-shadow: 0px 0px 5px #14fffa;
         }
 
         .newGame {

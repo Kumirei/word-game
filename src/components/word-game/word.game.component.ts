@@ -17,13 +17,9 @@ import { StatsComponent } from 'src/components/stats/stats.component'
     selector: 'word-game',
     standalone: true,
     template: `
-        <twinkles
-            [density]="1 / 15000"
-            [onTime]="2000"
-            [offTime]="8000"
-        ></twinkles>
-        <seqle-header (newGame)="newGame()"></seqle-header>
-        <app-game></app-game>
+        <twinkles [density]="1 / 15000" [onTime]="2000" [offTime]="8000" />
+        <seqle-header (newGame)="newGame()" />
+        <app-game />
     `,
     styles: `
         :host {

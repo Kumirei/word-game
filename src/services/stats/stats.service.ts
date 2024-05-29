@@ -30,7 +30,7 @@ export class StatsService {
 
     public static win(guesses: string[]) {
         const wordCount = guesses.length
-        const letterCount = new Set(guesses.join('').split('')).size
+        const letterCount = guesses.join('').split('').length
 
         const stats = this.getStats()
         stats.finished++

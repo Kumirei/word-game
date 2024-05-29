@@ -4,10 +4,10 @@ import {
     provideExperimentalZonelessChangeDetection,
 } from '@angular/core'
 
-import { WordGameComponent } from './components/word-game/word.game.component'
 import { environment } from './environments/environment'
 import { bootstrapApplication } from '@angular/platform-browser'
 import { provideHttpClient } from '@angular/common/http'
+import { WordGameComponent } from './components/word-game/word.game.component'
 
 if (environment.production) {
     enableProdMode()

@@ -1,5 +1,8 @@
 import { WordsService } from './services/words/words.service'
-import { enableProdMode } from '@angular/core'
+import {
+    enableProdMode,
+    provideExperimentalZonelessChangeDetection,
+} from '@angular/core'
 
 import { WordGameComponent } from './components/word-game/word.game.component'
 import { environment } from './environments/environment'
@@ -10,7 +13,12 @@ if (environment.production) {
     enableProdMode()
 }
 
-bootstrapApplication(WordGameComponent, { providers: [provideHttpClient()] })
+bootstrapApplication(WordGameComponent, {
+    providers: [
+        provideHttpClient(),
+        provideExperimentalZonelessChangeDetection(),
+    ],
+})
 
 declare global {
     interface Window {

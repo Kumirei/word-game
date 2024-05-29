@@ -66,10 +66,10 @@
     vertical-align: middle;
     position: absolute;
     right: 0;
-    width: 2rem;
-    font-size: 1.3rem;
     top: 0;
     cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.5em;
 }
 
 .wrongAnswer {
@@ -196,7 +196,7 @@ input:disabled {
     color: black;
 }
 
-.cell {
+.board:not([solved='true']) .cell {
     cursor: pointer;
 }
 

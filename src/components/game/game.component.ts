@@ -104,7 +104,7 @@ export class GameComponent implements OnInit {
 
     @HostListener('document:keydown', ['$event'])
     onType(event: KeyboardEvent) {
-        this.focusInput()
+        if (/^[a-zA-Z]$/.test(event.key)) this.focusInput()
     }
 
     onInput(text: string) {
@@ -245,6 +245,7 @@ export class GameComponent implements OnInit {
     }
 
     onCellClick(cell: any) {
+        if (this.solved) return
         this.guesses[this.guesses.length - 1] += cell.char
         this.onInput(this.guesses[this.guesses.length - 1])
     }
@@ -264,5 +265,9 @@ export class GameComponent implements OnInit {
             )
             .join('\n')
         navigator.clipboard.writeText(text)
+    }
+
+    filterKeypress(event: KeyboardEvent) {
+        if (!/^[a-zA-Z]$/.test(event.key)) event.preventDefault()
     }
 }

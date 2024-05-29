@@ -18,6 +18,9 @@ const Icons = {
     enter: {
         id: 'enter',
     },
+    cross: {
+        id: 'cross',
+    },
 }
 
 @Component({
@@ -25,13 +28,14 @@ const Icons = {
     template: `
         <svg width="20" height="20" viewBox="0 0 20 20">
             <use
-                [attr.xlink:href]="'../../assets/icons.svg?#' + Icons[type].id"
+                [attr.xlink:href]="'../../assets/icons.svg#' + Icons[type].id"
             ></use>
         </svg>
     `,
     styles: `
         :host {
-            display: block;
+            display: flex;
+            justify-content: center;
         }
 
         svg {

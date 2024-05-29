@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     ElementRef,
@@ -8,6 +9,7 @@ import {
     QueryList,
     ViewChild,
     ViewChildren,
+    ViewEncapsulation,
 } from '@angular/core'
 import { BoardService } from '../../services/board/board.service'
 import { WordsService } from '../../services/words/words.service'
@@ -25,6 +27,8 @@ import { IconComponent } from '../icon/icon.component'
     providers: [BoardService, WordsService, StatsService],
     standalone: true,
     imports: [FormsModule, UpperCasePipe, SlicePipe, IconComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.Emulated,
 })
 export class GameComponent implements OnInit {
     @ViewChild('wordInput') wordInput!: ElementRef

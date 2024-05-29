@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    ViewEncapsulation,
+} from '@angular/core'
 
 const Icons = {
     'bar-chart': {
@@ -37,6 +42,7 @@ const Icons = {
     `,
     standalone: true,
     changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.Emulated,
 })
 export class IconComponent {
     @Input({ required: true }) type!: keyof typeof Icons

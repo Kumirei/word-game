@@ -1,6 +1,6 @@
-
 import {
     AfterViewInit,
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     ElementRef,
@@ -12,6 +12,7 @@ import {
     QueryList,
     SimpleChanges,
     ViewChildren,
+    ViewEncapsulation,
 } from '@angular/core'
 
 @Component({
@@ -20,9 +21,9 @@ import {
     imports: [],
     template: `
         @for (_ of twinkles; track _) {
-          <div #twinkle class="twinkle"></div>
+            <div #twinkle class="twinkle"></div>
         }
-        `,
+    `,
     styles: [
         `
             :host {
@@ -46,6 +47,8 @@ import {
             }
         `,
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.Emulated,
 })
 export class Twinkles implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @Input() density: number = 1 / 10_000 // Twinkles per pixel

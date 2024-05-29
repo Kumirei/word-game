@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core'
+import {
+    ChangeDetectionStrategy,
+    Component,
+    OnInit,
+    ViewEncapsulation,
+} from '@angular/core'
 import { StatsService } from '../../services/stats/stats.service'
 import { ChartComponent } from '../chart/chart.component'
 
@@ -50,6 +55,8 @@ import { ChartComponent } from '../chart/chart.component'
     ],
     standalone: true,
     imports: [ChartComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.Emulated,
 })
 export class StatsComponent implements OnInit {
     finished: number = 0

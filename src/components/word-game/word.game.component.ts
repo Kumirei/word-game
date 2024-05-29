@@ -4,7 +4,7 @@ import {
     ViewChild,
     ViewEncapsulation,
 } from '@angular/core'
-import { GameComponent } from '../components/game/game.component'
+import { GameComponent } from '../game/game.component'
 import { FormsModule } from '@angular/forms'
 import { Twinkles } from 'src/components/twinkles/twinkles.component'
 import { ChartComponent } from 'src/components/chart/chart.component'

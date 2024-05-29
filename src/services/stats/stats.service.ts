@@ -43,7 +43,6 @@ export class StatsService {
                 (stats.wordLengthCount[wordLength] || 0) + 1
         }
         this.saveStats(stats)
-        console.log('stats', stats)
     }
 }
 

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { DictionaryEntry, WordsService } from '../words/words.service'
-import { group, randomNumberBetween, shuffle } from '../../utils/util'
-import * as d3 from 'd3'
+import { shuffle } from '../../utils/util'
 
 @Injectable({
     providedIn: 'root',
@@ -33,14 +32,9 @@ export class BoardService {
                     )
                 )
             grid = BoardService.createGridWithWords(size, solution)
-            console.log('SOLUTION', solution)
 
             const possibleWords = BoardService.findWordsInGrid('large', grid)
             aSolution = BoardService.findASolution(grid, possibleWords)
-            console.log(
-                'aSolution',
-                aSolution.map((a) => a[0])
-            )
         } while (aSolution.length >= 4)
 
         return {
@@ -83,7 +77,6 @@ export class BoardService {
         // Try all words as first word
         // Thereafter just try the best one until grid is filled
         let solutions = []
-        console.log('WORDS', wordList)
 
         outer: for (let word of wordList.slice(0, 1)) {
             const solution: [string, Set<string>][] = [word]
@@ -366,7 +359,8 @@ export class BoardService {
             // const [x, y] = empty[Math.floor(Math.random() * empty.length)]
             const placed = this.placeLettersOnGrid(grid, word, x, y)
             const open = placed && this.allRemainingConnected(grid)
-            if (placed && open) return { ok: true, grid } // Done
+            if (placed && open)
+                return { ok: true, grid } // Done
             else grid = this.copyGrid(original)
         }
         return { ok: false, grid }

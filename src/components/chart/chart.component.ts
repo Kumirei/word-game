@@ -4,7 +4,29 @@ import * as d3 from 'd3'
 
 @Component({
     selector: 'sixten-chart',
-    templateUrl: './chart.component.html',
+    template: `
+        <div class="flexWrapper">
+            <div class="data">
+                @for (item of data; track $index) {
+                    <div
+                        class="bar"
+                        [style.--height.%]="(item.value / max) * 100"
+                        [style.--background]="colors[$index]"
+                    >
+                        @if (item.value) {
+                            <label>{{ item.value }}</label>
+                        }
+                        <div class="fill"></div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="x-legend">
+            @for (item of data; track $index) {
+                <div>{{ item.label }}</div>
+            }
+        </div>
+    `,
     styles: [
         `
             :host {
@@ -67,7 +89,6 @@ export class ChartComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        console.log('DATA', this.data)
         this.max = Math.max(...this.data.map((item) => item.value))
         const green = d3.hsl(540, 1.0, 0.8)
         // const green = d3.rgb(203, 104, 228)

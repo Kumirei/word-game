@@ -66,8 +66,6 @@ export class StatsComponent implements OnInit {
         this.letterCount = this.statsToChartData(stats.letterCount)
 
         this.wordLengthCount = this.statsToChartData(stats.wordLengthCount)
-
-        console.log('STATS', stats)
     }
 
     statsToChartData(
@@ -81,8 +79,6 @@ export class StatsComponent implements OnInit {
         for (let [count, times] of Object.entries(stats)) {
             data[Number(count) - 1] = { label: count, value: times }
         }
-
-        console.log('STAT', { stats, max, data })
 
         return data
     }

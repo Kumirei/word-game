@@ -22,8 +22,6 @@ export class WordsService {
     ) => void
 
     constructor(private http: HttpClient) {
-        // console.log('CONSTR WORD')
-
         WordsService.ready = new Promise(async (res, rej) => {
             WordsService.words = {
                 // small: await this.loadWords('words3k.txt'),
@@ -41,7 +39,6 @@ export class WordsService {
         const data = await firstValueFrom(
             this.http.get(`assets/${fileName}`, { responseType: 'text' })
         )
-        // console.log('data', data)
         const words = data.split(/[\r\n]+/)
 
         return WordsService.makeDictionary(words)

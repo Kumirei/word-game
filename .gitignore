@@ -12,6 +12,6 @@ package-lock.json
 .turbo
 
 # Angular
-.angular/cache
+**/.angular/cache
 
 # Miscellaneous

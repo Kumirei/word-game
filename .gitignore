@@ -1,12 +1,12 @@
 # Compiled output
-**/dist
+dist
 
 # Node
-**/node_modules
+node_modules
 
 # Visual Studio Code
 .vscode
 
 # Miscellaneous
-**/.angular/cache
+.angular/cache
 package-lock.json

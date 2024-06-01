@@ -1,46 +1,10 @@
 {
     "name": "word-game",
-    "version": "0.0.0",
-    "type": "module",
-    "scripts": {
-        "ng": "ng",
-        "start": "ng serve",
-        "build": "ng build",
-        "watch": "ng build --watch --configuration development",
-        "test": "ng test",
-        "publish": "ng build --base-href https://kumirei.github.io/word-game/ && gh-pages -d dist/word-game",
-        "preinstall": "npx only-allow pnpm"
-    },
+    "version": "0.0.1",
     "private": true,
-    "dependencies": {
-        "@angular/animations": "^18.0.0",
-        "@angular/common": "^18.0.0",
-        "@angular/compiler": "^18.0.0",
-        "@angular/core": "^18.0.0",
-        "@angular/forms": "^18.0.0",
-        "@angular/platform-browser": "^18.0.0",
-        "@angular/platform-browser-dynamic": "^18.0.0",
-        "@angular/router": "^18.0.0",
-        "d3": "^7.9.0",
-        "d3-color": "^3.1.0",
-        "d3-interpolate": "^3.0.1",
-        "rxjs": "~7.5.0",
-        "tslib": "^2.3.0"
-    },
-    "devDependencies": {
-        "@angular-devkit/build-angular": "^18.0.1",
-        "@angular/cli": "~18.0.1",
-        "@angular/compiler-cli": "^18.0.0",
-        "@types/d3": "^7.4.3",
-        "@types/jasmine": "~4.0.0",
-        "jasmine-core": "~4.1.0",
-        "karma": "~6.3.0",
-        "karma-chrome-launcher": "~3.1.0",
-        "karma-coverage": "~2.2.0",
-        "karma-jasmine": "~5.0.0",
-        "karma-jasmine-html-reporter": "~1.7.0",
-        "prettier": "^3.2.5",
-        "ts-node": "^10.9.2",
-        "typescript": "~5.4.5"
+    "packageManager": "pnpm@latest",
+    "scripts": {
+        "dev": "turbo dev",
+        "preinstall": "npx only-allow pnpm"
     }
 }

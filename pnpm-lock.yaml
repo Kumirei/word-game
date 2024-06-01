@@ -6,7 +6,9 @@ settings:
 
 importers:
 
-  .:
+  .: {}
+
+  apps/client/angular:
     dependencies:
       '@angular/animations':
         specifier: ^18.0.0

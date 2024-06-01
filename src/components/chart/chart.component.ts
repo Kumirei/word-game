@@ -1,13 +1,15 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit, input } from '@angular/core'
 import { RoundPipe } from '../../pipes/round.pipe'
 import * as d3 from 'd3'
+
+export type ChartData = { label: string; value: number }[]
 
 @Component({
     selector: 'sixten-chart',
     template: `
         <div class="flexWrapper">
             <div class="data">
-                @for (item of data; track $index) {
+                @for (item of data(); track $index) {
                     <div
                         class="bar"
                         [style.--height.%]="(item.value / max) * 100"
@@ -22,7 +24,7 @@ import * as d3 from 'd3'
             </div>
         </div>
         <div class="x-legend">
-            @for (item of data; track $index) {
+            @for (item of data(); track $index) {
                 <div>{{ item.label }}</div>
             }
         </div>
@@ -75,7 +77,7 @@ import * as d3 from 'd3'
     imports: [RoundPipe],
 })
 export class ChartComponent implements OnInit {
-    @Input({ required: true }) data: { label: string; value: number }[] = []
+    data = input.required<ChartData>()
     max: number = 1
     ticks = new Array(11).fill(null).map((_, i) => (10 - i) / 10)
     colors: string[] = []
@@ -89,15 +91,15 @@ export class ChartComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.max = Math.max(...this.data.map((item) => item.value))
+        this.max = Math.max(...this.data().map((item) => item.value))
         const green = d3.hsl(540, 1.0, 0.8)
         // const green = d3.rgb(203, 104, 228)
         // const red = d3.rgb(130, 205, 234)
         const red = d3.hsl(288, 1.0, 0.72)
 
-        this.colors = new Array(this.data.length).fill(null).map((_, i) => {
+        this.colors = new Array(this.data().length).fill(null).map((_, i) => {
             const weight =
-                this.data.length === 1 ? 0 : i / (this.data.length - 1)
+                this.data().length === 1 ? 0 : i / (this.data().length - 1)
             return d3.interpolate(green, red)(weight)
         })
     }

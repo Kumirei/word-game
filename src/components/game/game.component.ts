@@ -4,7 +4,6 @@ import {
     Component,
     ElementRef,
     HostListener,
-    Input,
     OnInit,
     QueryList,
     ViewChild,
@@ -35,8 +34,7 @@ export class GameComponent implements OnInit {
     @ViewChildren('cell') cells!: QueryList<ElementRef>
 
     static GUESSES = 5
-    @Input() size: [number, number] = [4, 4]
-    sizes = [3, 4, 5, 6, 7, 8, 9, 10, 15, 20]
+    size: [number, number] = [4, 4]
     isInit = false
     board: string[][] = []
     solution: string[] = []

@@ -1,8 +1,8 @@
 import {
     ChangeDetectionStrategy,
     Component,
-    ViewChild,
     ViewEncapsulation,
+    viewChild,
 } from '@angular/core'
 import { GameComponent } from '../game/game.component'
 import { FormsModule } from '@angular/forms'
@@ -51,9 +51,9 @@ import { StatsComponent } from 'src/components/stats/stats.component'
     encapsulation: ViewEncapsulation.Emulated,
 })
 export class WordGameComponent {
-    @ViewChild(GameComponent) GameComponent!: GameComponent
+    GameComponent = viewChild(GameComponent)
 
     newGame() {
-        this.GameComponent.newBoard()
+        this.GameComponent()?.newBoard()
     }
 }

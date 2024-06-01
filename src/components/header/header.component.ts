@@ -4,6 +4,7 @@ import {
     EventEmitter,
     Output,
     ViewEncapsulation,
+    output,
 } from '@angular/core'
 import { StatsComponent } from '../stats/stats.component'
 import { IconComponent } from '../icon/icon.component'
@@ -120,7 +121,7 @@ import { HelpComponent } from '../help/help.component'
     imports: [StatsComponent, IconComponent, HelpComponent],
 })
 export class HeaderComponent {
-    @Output() newGame = new EventEmitter<void>()
+    newGame = output<void>()
 
     statsOpen = false
 }

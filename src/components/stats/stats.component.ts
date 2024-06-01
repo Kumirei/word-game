@@ -5,7 +5,7 @@ import {
     ViewEncapsulation,
 } from '@angular/core'
 import { StatsService } from '../../services/stats/stats.service'
-import { ChartComponent } from '../chart/chart.component'
+import { ChartComponent, ChartData } from '../chart/chart.component'
 
 @Component({
     selector: 'stats',
@@ -60,9 +60,9 @@ import { ChartComponent } from '../chart/chart.component'
 })
 export class StatsComponent implements OnInit {
     finished: number = 0
-    wordCount: ChartComponent['data'] = []
-    letterCount: ChartComponent['data'] = []
-    wordLengthCount: ChartComponent['data'] = []
+    wordCount: ChartData = []
+    letterCount: ChartData = []
+    wordLengthCount: ChartData = []
 
     ngOnInit(): void {
         const stats = StatsService.getStats()
@@ -77,10 +77,10 @@ export class StatsComponent implements OnInit {
 
     statsToChartData(
         stats: ReturnType<typeof StatsService.getStats>['wordCount']
-    ): ChartComponent['data'] {
+    ): ChartData {
         const max = Math.max(...Object.keys(stats).map(Number))
 
-        const data: ChartComponent['data'] = new Array(max - 1)
+        const data: ChartData = new Array(max - 1)
             .fill(null)
             .map((_, i) => ({ label: String(i + 1), value: 0 }))
         for (let [count, times] of Object.entries(stats)) {

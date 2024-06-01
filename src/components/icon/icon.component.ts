@@ -3,6 +3,7 @@ import {
     Component,
     Input,
     ViewEncapsulation,
+    input,
 } from '@angular/core'
 
 const Icons = {
@@ -28,7 +29,7 @@ const Icons = {
     template: `
         <svg width="20" height="20" viewBox="0 0 20 20">
             <use
-                [attr.xlink:href]="'../../assets/icons.svg#' + Icons[type].id"
+                [attr.xlink:href]="'../../assets/icons.svg#' + Icons[type()].id"
             ></use>
         </svg>
     `,
@@ -49,7 +50,7 @@ const Icons = {
     encapsulation: ViewEncapsulation.Emulated,
 })
 export class IconComponent {
-    @Input({ required: true }) type!: keyof typeof Icons
+    type = input.required<keyof typeof Icons>()
 
     Icons = Icons
 }

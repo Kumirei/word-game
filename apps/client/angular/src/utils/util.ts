@@ -1,15 +1,21 @@
 export function shuffle<T>(array: T[]): T[] {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1))
-        ;[array[i], array[j]] = [array[j], array[i]]
+        swap(array, i, j)
     }
     return array
+}
+
+export function swap<A extends unknown[]>(array: A, a: number, b: number) {
+    const temp = array[a]
+    array[a] = array[b]
+    array[b] = temp
 }
 
 export function group<T>(arr: T[], groupSize: number): T[][] {
     return arr.reduce((groups, item, i) => {
         if (i % groupSize === 0) groups.push([])
-        groups[groups.length - 1].push(item)
+        groups[groups.length - 1]?.push(item)
         return groups
     }, [] as T[][])
 }

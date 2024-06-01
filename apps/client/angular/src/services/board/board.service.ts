@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { DictionaryEntry, WordsService } from '../words/words.service'
+import { type DictionaryEntry, WordsService } from '../words/words.service'
 import { shuffle } from '../../utils/util'
 
 @Injectable({
@@ -31,10 +31,10 @@ export class BoardService {
                         WordsService.words.four.list
                     )
                 )
-            grid = BoardService.createGridWithWords(size, solution)
+            grid = BoardService.createGridWithWords(size, solution)!
 
             const possibleWords = BoardService.findWordsInGrid('large', grid)
-            aSolution = BoardService.findASolution(grid, possibleWords)
+            aSolution = BoardService.findASolution(grid, possibleWords)!
         } while (aSolution.length >= 4)
 
         return {
@@ -47,7 +47,7 @@ export class BoardService {
         grid: string[][],
         words: Record<string, Set<string>>
     ) {
-        const cellCount = grid[0].length * grid.length
+        const cellCount = grid[0]!.length * grid.length
         // Prune word list
         // const cellList = Object.values(words).filter((cells) => cells.size > 2) // Only accept solutions with no 2 cell words
         const cellList = Object.entries(words)
@@ -67,7 +67,7 @@ export class BoardService {
         grid: string[][],
         words: Record<string, Set<string>>
     ) {
-        const cellCount = grid[0].length * grid.length
+        const cellCount = grid[0]!.length * grid.length
         // Sort by number of cells
         const wordList = Object.entries(words)
             .sort((a, b) => b[1].size - a[1].size)
@@ -92,8 +92,8 @@ export class BoardService {
                         this.setDiff(a[1], covered).size
                 )
                 // Just pick the best one
-                solution.push(wordList[0])
-                for (let cell of wordList[0][1]) covered.add(cell)
+                solution.push(wordList[0]!)
+                for (let cell of wordList[0]![1]) covered.add(cell)
             }
             solutions.push(solution)
         }
@@ -131,7 +131,7 @@ export class BoardService {
                 : WordsService.words[wordList].dictionary
         const foundWords: Record<string, Set<string>> = {}
         for (let y = 0; y < grid.length; y++) {
-            for (let x = 0; x < grid[y].length; x++) {
+            for (let x = 0; x < grid[y]!.length; x++) {
                 BoardService.findWords(dictionary, grid, '', x, y, foundWords)
             }
         }
@@ -151,21 +151,22 @@ export class BoardService {
         if (dictionary.isWord) {
             if (!foundWords[prefix]) foundWords[prefix] = new Set(cells)
             // If we have already found this word elsewhere, just add the cells
-            else foundWords[prefix] = new Set([...foundWords[prefix], ...cells])
+            else
+                foundWords[prefix] = new Set([...foundWords[prefix]!, ...cells])
         }
 
         const neighbors = BoardService.getNeighbors(grid, x, y)
         for (let [nx, ny] of neighbors) {
-            const char = grid[ny][nx]
+            const char = grid[ny!]![nx!]!
             if (char in dictionary) {
                 const key = `${nx}/${ny}`
                 cells.add(key)
                 BoardService.findWords(
-                    dictionary[char],
+                    dictionary[char]!,
                     grid,
                     prefix + char,
-                    nx,
-                    ny,
+                    nx!,
+                    ny!,
                     foundWords,
                     cells
                 )
@@ -186,11 +187,11 @@ export class BoardService {
         let chars = 0
         let lastGuessPossible = false
         for (let i = 0; i < guesses.length; i++) {
-            const guess = guesses[i].toLowerCase()
+            const guess = guesses[i]!.toLowerCase()
             // Find start of word, then traverse all possible paths to create word
             for (let y = 0; y < board.length; y++) {
-                for (let x = 0; x < board[y].length; x++) {
-                    if (board[y][x].char !== guess[0]) continue
+                for (let x = 0; x < board[y]!.length; x++) {
+                    if (board[y]![x]!.char !== guess[0]) continue
                     const ok = BoardService.applyGuess(
                         board,
                         i + 1,
@@ -209,13 +210,13 @@ export class BoardService {
     }
 
     public static getNeighbors(board: any[][], x: number, y: number) {
-        return BoardService.DELTAS.map(([dx, dy]) => [x + dx, y + dy]).filter(
-            ([x, y]) => board[y]?.[x]
+        return BoardService.DELTAS.map(([dx, dy]) => [x + dx!, y + dy!]).filter(
+            ([x, y]) => board[y!]?.[x!]
         )
     }
 
     public static getNeighbors2(x: number, y: number) {
-        return BoardService.DELTAS.map(([dx, dy]) => [x + dx, y + dy])
+        return BoardService.DELTAS.map(([dx, dy]) => [x + dx!, y + dy!])
     }
 
     public static applyGuess(
@@ -242,8 +243,8 @@ export class BoardService {
                     board,
                     state,
                     guess.slice(1),
-                    nx,
-                    ny,
+                    nx!,
+                    ny!,
                     guessCount,
                     step + 1
                 )
@@ -257,7 +258,7 @@ export class BoardService {
     }
 
     public static doesWordCoverGrid(grid: string[][], word: string) {
-        const gridSize = grid.length * grid[0].length
+        const gridSize = grid.length * grid[0]!.length
         const words = BoardService.findWordsInGrid('custom', grid, [word])
 
         return words[word]?.size === gridSize
@@ -281,8 +282,8 @@ export class BoardService {
     ) {
         let states = [this.getEmptyGrid(size)]
         for (let w = 0; w < words.length; true) {
-            const word = words[w]
-            const state = states[w]
+            const word = words[w]!
+            const state = states[w]!
             const { ok, grid } = this.placeWordOnGrid(
                 this.copyGrid(state),
                 word
@@ -305,14 +306,14 @@ export class BoardService {
     private static logBoard(board: string[][]) {
         console.log(
             ' ' +
-                new Array(board[0].length)
+                new Array(board[0]!.length)
                     .fill(null)
                     .map((_, i) => i)
                     .join('')
         )
         for (let y = 0; y < board.length; y++) {
             console.log(
-                y + board[y].map((cell) => (cell === '' ? ' ' : cell)).join('')
+                y + board[y]!.map((cell) => (cell === '' ? ' ' : cell)).join('')
             )
         }
     }
@@ -321,8 +322,8 @@ export class BoardService {
         // Iterate over grid and flood fill from all empty. If two unvisited empties are found, boooo
         const visited = new Set<string>()
         for (let y = 0; y < grid.length; y++) {
-            for (let x = 0; x < grid[y].length; x++) {
-                if (grid[y][x] !== '') continue
+            for (let x = 0; x < grid[y]!.length; x++) {
+                if (grid[y]![x] !== '') continue
                 // const key = `${x},${y}`
                 // if (visited.size && !visited.has(key)) return false // BOOOO
                 this.floodFillEmpty(grid, visited, x, y)
@@ -339,13 +340,13 @@ export class BoardService {
         y: number
     ) {
         if (grid[y]?.[x] === undefined) return // Out of bounds
-        if (grid[y][x] !== '') return // Only interested in empties
+        if (grid[y]![x] !== '') return // Only interested in empties
         const key = `${x},${y}`
         if (visited.has(key)) return // Already visited
         visited.add(key)
 
         for (let [nx, ny] of this.getNeighbors2(x, y)) {
-            this.floodFillEmpty(grid, visited, nx, ny)
+            this.floodFillEmpty(grid, visited, nx!, ny!)
         }
     }
 
@@ -374,25 +375,25 @@ export class BoardService {
     ): boolean {
         if (!letters) return true // Done
         if (grid[y]?.[x] === undefined) return false // Out of bounds
-        if (grid[y][x] !== '') return false // Already occupied
+        if (grid[y]![x] !== '') return false // Already occupied
 
-        grid[y][x] = letters[0]
+        grid[y]![x] = letters[0]!
 
         const neighbors = this.getNeighbors2(x, y)
         for (let [nx, ny] of neighbors) {
-            if (this.placeLettersOnGrid(grid, letters.slice(1), nx, ny))
+            if (this.placeLettersOnGrid(grid, letters.slice(1), nx!, ny!))
                 return true
         }
 
-        grid[y][x] = '' // Didn't work out, reset
+        grid[y]![x] = '' // Didn't work out, reset
         return false
     }
 
     private static findEmpty(grid: string[][]) {
         const empty: [number, number][] = []
         for (let y = 0; y < grid.length; y++) {
-            for (let x = 0; x < grid[y].length; x++) {
-                if (grid[y][x] === '') empty.push([x, y])
+            for (let x = 0; x < grid[y]!.length; x++) {
+                if (grid[y]![x] === '') empty.push([x, y])
             }
         }
         return empty
@@ -413,20 +414,26 @@ export class BoardService {
         if (placed.has(key)) return
         if (grid[y]?.[x] === undefined) return false
 
-        grid[y][x] = letters[0]
+        grid[y]![x] = letters[0]!
         placed.add(key)
 
-        if (placed.size === grid[0].length * grid.length) return true
+        if (placed.size === grid[0]!.length * grid.length) return true
 
         for (let [nx, ny] of BoardService.getNeighbors2(x, y)) {
             if (
-                this.placeSolutionOnGrid(grid, placed, letters.slice(1), nx, ny)
+                this.placeSolutionOnGrid(
+                    grid,
+                    placed,
+                    letters.slice(1),
+                    nx!,
+                    ny!
+                )
             )
                 return true
         }
 
         placed.delete(key)
-        grid[y][x] = ''
+        grid[y]![x] = ''
         return false
     }
 

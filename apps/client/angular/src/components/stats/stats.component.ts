@@ -1,11 +1,11 @@
 import {
     ChangeDetectionStrategy,
     Component,
-    OnInit,
+    type OnInit,
     ViewEncapsulation,
 } from '@angular/core'
 import { StatsService } from '../../services/stats/stats.service'
-import { ChartComponent, ChartData } from '../chart/chart.component'
+import { ChartComponent, type ChartData } from '../chart/chart.component'
 
 @Component({
     selector: 'stats',

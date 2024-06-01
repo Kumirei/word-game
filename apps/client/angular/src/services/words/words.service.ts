@@ -50,7 +50,7 @@ export class WordsService {
             let dict = dictionary
             for (let char of word) {
                 if (!dict[char]) dict[char] = {}
-                dict = dict[char]
+                dict = dict[char] as DictionaryEntry
             }
             dict.isWord = true
         }
@@ -73,12 +73,12 @@ export class WordsService {
         words: string[] = WordsService.words.large.list
     ) {
         const alphaWords = words.filter((word) => !/[^\w]/.test(word))
-        return alphaWords[Math.floor(alphaWords.length * Math.random())]
+        return alphaWords[Math.floor(alphaWords.length * Math.random())]!
     }
 
     public static isWord(word: string) {
         let dict = WordsService.words.large.dictionary
-        for (let char of word) dict = dict?.[char]
+        for (let char of word) dict = dict?.[char] as DictionaryEntry
         return !!dict?.isWord
     }
 
@@ -95,14 +95,15 @@ export class WordsService {
                 (word) => word.length <= totalChars - chars
             )
             let word = wordList[Math.floor(Math.random() * wordList.length)]
-            if (!word && totalChars - chars < minChars)
+            if (!word && totalChars - chars < minChars) {
                 word = WordsService.getRandomWordOfLength(
                     'large',
                     totalChars - chars
                 )
+            }
 
             words.push(word)
-            chars += word.length
+            chars += word?.length || 0
         }
 
         return words
@@ -130,7 +131,7 @@ export class WordsService {
                 wordLength === charsPerWordCeil ? wordListCeil : wordListFloor
             )
             words.push(word)
-            chars += word.length
+            chars += word?.length || 0
         }
 
         return words

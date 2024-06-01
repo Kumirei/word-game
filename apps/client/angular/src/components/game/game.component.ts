@@ -4,7 +4,7 @@ import {
     Component,
     ElementRef,
     HostListener,
-    OnInit,
+    type OnInit,
     QueryList,
     ViewChild,
     ViewChildren,
@@ -157,18 +157,18 @@ export class GameComponent implements OnInit {
         for (let i = start; i <= end; i++) bumps[i] = []
 
         for (let y = 0; y < this.state.length; y++) {
-            for (let x = 0; x < this.state[y].length; x++) {
-                const cell = this.state[y][x]
+            for (let x = 0; x < this.state[y]!.length; x++) {
+                const cell = this.state[y]![x]!
                 for (let [s, multiplicity] of Object.entries(cell.step)) {
                     const step = Number(s)
                     if (step >= start && step <= end)
-                        bumps[step].push([x, y, multiplicity])
+                        bumps[step]!.push([x, y, multiplicity])
                 }
             }
         }
 
         for (let step = start; step <= end; step++) {
-            for (let [x, y, m] of bumps[step]) this.bumpChar(x, y, m)
+            for (let [x, y, m] of bumps[step]!) this.bumpChar(x, y, m)
             await delay(200)
         }
     }
@@ -245,11 +245,11 @@ export class GameComponent implements OnInit {
     onCellClick(cell: any) {
         if (this.solved) return
         this.guesses[this.guesses.length - 1] += cell.char
-        this.onInput(this.guesses[this.guesses.length - 1])
+        this.onInput(this.guesses[this.guesses.length - 1]!)
     }
 
     onDelete() {
-        const guess = this.guesses[this.guesses.length - 1]
+        const guess = this.guesses[this.guesses.length - 1]!
         if (this.guesses.length > 1 && guess === '') {
             this.guesses.pop()
         } else this.guesses[this.guesses.length - 1] = guess.slice(0, -1)

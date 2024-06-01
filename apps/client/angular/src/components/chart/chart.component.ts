@@ -1,4 +1,4 @@
-import { Component, OnInit, input } from '@angular/core'
+import { Component, type OnInit, input } from '@angular/core'
 import { RoundPipe } from '../../pipes/round.pipe'
 import * as d3 from 'd3'
 

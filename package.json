@@ -2,7 +2,6 @@
     "name": "word-game",
     "version": "0.0.1",
     "private": true,
-    "packageManager": "pnpm@latest",
     "scripts": {
         "dev": "turbo dev",
         "preinstall": "npx only-allow pnpm"

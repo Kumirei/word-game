@@ -5,7 +5,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "vitest",
         "dev": "pnpm tsx watch server.ts"
     },
     "keywords": [],
@@ -17,6 +17,7 @@
     "devDependencies": {
         "@types/express": "^4.17.21",
         "tsx": "^4.11.0",
-        "typescript": "~5.4.5"
+        "typescript": "~5.4.5",
+        "vitest": "^1.6.0"
     }
 }

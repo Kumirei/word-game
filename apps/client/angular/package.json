@@ -6,7 +6,6 @@
         "dev": "ng serve",
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
-        "test": "ng test",
         "publish": "ng build --base-href https://kumirei.github.io/word-game/ && gh-pages -d dist/word-game/browser",
         "preinstall": "npx only-allow pnpm"
     },

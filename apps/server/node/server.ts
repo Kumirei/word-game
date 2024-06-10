@@ -1,4 +1,6 @@
 import express from 'express'
+import { createBoard } from './board.js'
+import { Words } from './words.js'
 
 const app = express()
 const port = 3000
@@ -15,7 +17,16 @@ app.get('/today', (req, res) => {
 
 // Get a new board
 app.get('/new', (req, res) => {
-    res.send('You asked for a brand new board')
+    const board = createBoard({
+        width: 4,
+        height: 4,
+        wordLengthMin: 4,
+        wordLengthMax: 4,
+        solvableLength: 3,
+        vocabulary: Words['100k'],
+        solutionVocabulary: Words['4letters'],
+    })
+    res.json(board).send()
 })
 
 // Check if a word is valid

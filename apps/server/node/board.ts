@@ -12,7 +12,7 @@ export type BoardOptions = {
     height: number
     vocabulary: Vocabulary
     wordLengthMin: number
-    wordLengthMax: number
+    wordLengthMax?: number
     solutionVocabulary?: Vocabulary // A subset of the full vocabulary used to create the board
     solvableLength?: number // Should be solvable in this many words. E.G. official solution is 4 words, but it can be solved in 3
 }
@@ -200,7 +200,7 @@ export function createSnakeNest(options: BoardOptions): SnakePart[][] {
             snakesByLength.get(newSnake.parts.size)?.add(newSnake)
 
             // If longer than should be, split
-            if (snake.parts.size > options.wordLengthMax) {
+            if (options.wordLengthMax && snake.parts.size > options.wordLengthMax) {
                 snakesByLength.get(snake.parts.size)?.delete(snake)
                 const [a, b] = splitSnake(snake, options.wordLengthMin - 1)
                 snakesByLength.get(a.parts.size)?.add(a)

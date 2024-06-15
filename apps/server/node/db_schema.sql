@@ -1,0 +1,1 @@
+CREATE TABLE boards (id INT PRIMARY KEY, date DATE, width INT, height INT, solution TEXT, letters TEXT);
